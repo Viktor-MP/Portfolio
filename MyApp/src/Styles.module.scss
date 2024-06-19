@@ -1,0 +1,24 @@
+.heading_anim {
+    background: linear-gradient(
+        -50deg,
+        var(--white) 15%,
+        var(--dark) 20%,
+        var(--white) 40%,
+        var(--dark) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    background-position: -200%;
+
+    animation: textBackground 8s cubic-bezier(0.215, 0.61, 0.355, 1)
+        alternate-reverse 1s 1 forwards;
+}
+
+@keyframes textBackground {
+    100% {
+        background-position: 200%;
+    }
+}
