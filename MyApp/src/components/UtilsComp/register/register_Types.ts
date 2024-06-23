@@ -17,6 +17,7 @@ export interface formContentValidate {
     userPass?: string;
     checkPass?: string;
     userName?: string;
+    error? : string
 }
 
 

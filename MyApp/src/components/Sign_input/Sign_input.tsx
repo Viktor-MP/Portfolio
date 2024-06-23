@@ -8,7 +8,6 @@ import { LiaEyeSolid, LiaEyeSlashSolid } from "react-icons/lia";
 // error or success icons
 import { GiCheckMark } from "react-icons/gi";
 import { RiErrorWarningLine } from "react-icons/ri";
-import { title } from "process";
 
 const Sign_input: FC<input_Types> = ({
     id,
@@ -22,7 +21,7 @@ const Sign_input: FC<input_Types> = ({
 }) => {
     const [showPassword, setShowPassword] = useState<boolean>(true);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const inputItem = useRef(null)
+    const inputItem = useRef(null);
 
     const [targetVal, setTargetVal] = useState<string>("");
     const [typing, setTyping] = useState<boolean>(false);
@@ -41,10 +40,6 @@ const Sign_input: FC<input_Types> = ({
         }, 1000);
     };
 
-
-
-
-    
     return (
         <div className="flex justify-center items-center relative">
             <div title={error} className="aspect-square w-8 absolute -left-8">
@@ -55,7 +50,6 @@ const Sign_input: FC<input_Types> = ({
                 ) : (
                     <></>
                 )}
-                <span className=""></span>
             </div>
             <input
                 ref={inputItem}
@@ -63,7 +57,7 @@ const Sign_input: FC<input_Types> = ({
                     isTyping(e);
                     return change(e);
                 }}
-                required = {required}
+                required={required}
                 placeholder={hold}
                 type={type ? (showPassword ? type : "text") : "text"}
                 className={
@@ -73,8 +67,6 @@ const Sign_input: FC<input_Types> = ({
                 minLength={type ? 6 : 4}
                 id={id}
                 name={id}
-            
-
             />
             {type &&
                 (showPassword ? (

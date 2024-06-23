@@ -11,6 +11,11 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
     ${Classes["alCen"]}
     `;
 
+    const logout = () => {
+
+    }
+
+
     return (
         <nav>
             <ul
@@ -20,14 +25,16 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                 })}
             >
                 {nav_utils.map((nav) => (
-                    <li
-                        
-                        key={nav.appName}
-                    >
+                    <li key={nav.appName}>
                         <Link to={nav.appRoot}>{nav.appName}</Link>
                     </li>
                 ))}
             </ul>
+
+            
+            <button onClick={logout}>
+                logout
+            </button>
         </nav>
     );
 };

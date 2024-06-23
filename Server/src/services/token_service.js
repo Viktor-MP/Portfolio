@@ -20,18 +20,8 @@ class TokenService {
     }
 
     async saveToken(id, accessToken, refreshToken) {
-        console.log("tokenData");
-        console.log(accessToken, 1)
-        console.log(refreshToken, 1)
 
-        // const tokenData = await Tokens.findOne({
-        //     where: {
-        //         id: id,
-        //     }
-        // });
         const tokenData = false
-        console.log("finding");
-        console.log(tokenData);
 
         console.log({ user_id: id, accessToken, refreshToken });
         if (tokenData) {
@@ -41,8 +31,18 @@ class TokenService {
 
 
         const token = await Tokens.create({ user_id: id, accessToken ,refreshToken });
-        console.log(token, "token service")
         return token;
+    }
+
+    async removeTokens(refreshToken) {
+        const deletedToken = await Tokens.destroy({
+            where: {
+                refreshToken,
+            },
+        });
+
+        console.log(deletedToken)
+        return deletedToken
     }
 }
 

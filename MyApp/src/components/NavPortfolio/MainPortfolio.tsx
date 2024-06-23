@@ -11,7 +11,7 @@ import {mainPropsType } from "../UtilsComp/main/main_Types";
 // import { Sling as Hamburger } from "hamburger-react";
 
 const MainPortfolio: FC<mainPropsType> = ({ className = "" }) => {
-
+    
     return (
         <section
             className={classNames({

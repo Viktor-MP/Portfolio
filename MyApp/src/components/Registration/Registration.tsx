@@ -6,17 +6,22 @@ import ClassesComb from "../../globalClasses/globalClasses";
 import {
     formContentType,
     formContentValidate,
-    registerTypes
+    registerTypes,
 } from "../UtilsComp/register/register_Types";
+
 import Sign_input from "../Sign_input/Sign_input";
 import { initial_formContent } from "../UtilsComp/register/register_utils";
+import { createBrowserHistory } from "history";
+// import { redirect } from "react-router-dom";
 
 import Styles from "../../Styles.module.scss";
 
-
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {
+    console.log(state);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [errors, setErrors] = useState<formContentValidate>({});
+
+    const history = createBrowserHistory();
 
     const register = useSelector(
         (state: RootState) => state.isRegistered.registered
@@ -42,9 +47,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
             });
         }, 1000);
     };
-
+    console.log(process.env.REACT_APP_URL);
     const validate = (form: formContentType) => {
-        console.log(1);
         const newErrors: Partial<formContentValidate> = {};
         const passwordRegex = /^(?=.*\d)(?=.*[-._])[A-Za-z\d-._]{6,16}$/;
         const userNameRegex = /^(?=.*[A-Z])[-._a-zA-Z0-9]{4,25}$/;
@@ -71,13 +75,51 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const signInFromDB = async (
+        e: FormEvent<HTMLFormElement | HTMLButtonElement>,
+        form: formContentType
+    ) => {
+        e.preventDefault();
+        console.log(e);
+        console.log(form);
+        const url = "http://localhost:5000/api/login";
+        // const values = Object.values(form);
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(form), // body data type must match "Content-Type" header
+            });
+            const data = await response.json();
+            console.log(data);
+            console.log(response);
+            if (response.status >= 200 && response.status < 300) {
+                // return redirect(
+                //     "http://localhost:3000/portfolio:" + `${data.userName}`
+                // );
+
+                console.log("redirect");
+                // history.push(`/portfolio?userName=${data.user.userName}`);
+                window.location.href =
+                    window.location.origin +
+                    "/portfolio?userName=" +
+                    `${data.user.userName}`;
+                //    navigate("/portfolio&userName=" + `${data.user.userName}`);
+            }
+            console.log(data);
+        } catch (error) {}
+    };
+
     const sendRegisteredDataToDB = async (
         e: FormEvent<HTMLFormElement | HTMLButtonElement>,
         form: formContentType
     ) => {
         e.preventDefault();
-        const url = "http://localhost:3000/api/registration";
-        console.log(JSON.stringify(form));
+        const url = "http://localhost:5000/api/registration";
+        // console.log(JSON.stringify(form));
         const values = Object.values(form);
 
         try {
@@ -92,23 +134,58 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                     },
                     body: JSON.stringify(form), // body data type must match "Content-Type" header
                 });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                console.log(response)
-                const data = await response.json();
 
-                // console.log(data, response.json());
+                const data = await response.json();
+                console.log(data, response.status, "hello");
+                if (response?.status >= 400) {
+                    setErrors({ userName: data.error });
+                } else if (response?.status >= 500) {
+                    setErrors({
+                        error: "An error occurred during registration.",
+                    });
+                }
+
+                if (response.status >= 200 && response.status < 300) {
+                    window.location.href =
+                        window.location.origin + "/portfolio/signIn";
+                }
+
                 return data; // parses JSON response into native JavaScript objects
             }
         } catch (error) {
-            console.log(error);
+            console.error(error, typeof error);
+            return error;
         }
     };
 
     useEffect(() => {
-        validate(formContent);
+        // console.log(formContent)
+        formContent.userName && state === "Sign Up" && validate(formContent);
     }, [formContent]);
+
+    const fetchUser = async () => {
+        const data = await fetch("http://localhost:5000/api/candidate/exists", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: JSON.stringify({
+                userName: formContent.userName,
+                key: "userName",
+            }),
+        });
+        const d = await data.json();
+
+        if (d.error) {
+            setErrors({ userName: d.error });
+        }
+    };
+
+    useEffect(() => {
+        formContent.userName && state === "Sign Up" && fetchUser();
+        // console.log(formContent.userName);
+    }, [formContent.userName]);
 
     return (
         <main
@@ -118,7 +195,11 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                 {comp_name}
             </h2>
             <form
-                onSubmit={(e) => sendRegisteredDataToDB(e, formContent)}
+                onSubmit={
+                    state === "Sign Up"
+                        ? (e) => sendRegisteredDataToDB(e, formContent)
+                        : (e) => signInFromDB(e, formContent)
+                }
                 className={`${ClassesComb["flex_col_cen"]} grid-cols-2 w-1/4 gap-3`}
             >
                 <Sign_input
@@ -150,6 +231,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                         type="password"
                     />
                 )}
+                {errors.error && <p>{errors.error}</p>}
 
                 <button
                     className={`${ClassesComb["submit_btn"]}`}
