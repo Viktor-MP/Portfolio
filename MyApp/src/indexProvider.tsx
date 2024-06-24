@@ -5,6 +5,8 @@ import TodoList from "./components/NavPortfolio/ChildPorts/TodoList_Port/TodoLis
 import ErrorEl from "./components/ErrorElement/ErrorEl";
 import Registration from "./components/Registration/Registration";
 console.log(window, location.href)
+    console.log("hello");
+
 const routes = createBrowserRouter([
     {
         path: "/",
