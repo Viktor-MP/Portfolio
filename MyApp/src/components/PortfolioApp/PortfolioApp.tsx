@@ -1,9 +1,10 @@
+
 import { Link } from "react-router-dom";
 import ClassesComb from "../../globalClasses/globalClasses";
 import Styles from "../../Styles.module.scss"
 
-const Portfolio = () => {
 
+const Portfolio = () => {
 
     return (
         <main

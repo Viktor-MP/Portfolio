@@ -1,1 +1,10 @@
-{"version":3,"sources":["Styles.module.scss","Styles.module.css"],"names":[],"mappings":"AAAA;EACI,0GAAA;EAOA,6BAAA;EACA,qBAAA;EACA,kBAAA;EACA,oCAAA;EACA,qBAAA;EACA,0BAAA;EAEA,gGAAA;ACNJ;;ADUA;EACI;IACI,yBAAA;ECPN;AACF","file":"Styles.module.css"}
+{
+    "version": 3,
+    "sources": [
+        "Styles.module.scss",
+        "Styles.module.css"
+    ],
+    "names": [],
+    "mappings": "AAAA;EACI,0GAAA;EAOA,6BAAA;EACA,qBAAA;EACA,kBAAA;EACA,oCAAA;EACA,qBAAA;EACA,0BAAA;EAEA,gGAAA;ACNJ;;ADUA;EACI;IACI,yBAAA;ECPN;AACF",
+    "file": "Styles.module.css"
+}

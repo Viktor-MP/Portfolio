@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../reduxState/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../../reduxState/store";
 import ClassesComb from "../../globalClasses/globalClasses";
 import {
     formContentType,
@@ -11,24 +11,29 @@ import {
 
 import Sign_input from "../Sign_input/Sign_input";
 import { initial_formContent } from "../UtilsComp/register/register_utils";
-import { createBrowserHistory } from "history";
 // import { redirect } from "react-router-dom";
 
 import Styles from "../../Styles.module.scss";
+import { useRegisterContext } from "../../contexts/registered_context";
+import { useNavigate } from "react-router-dom";
+import { validate } from "./formValidate";
+import { fetchUser } from "src/services/UserService";
+import { login, registration } from "src/services/AuthService";
 
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     console.log(state);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [errors, setErrors] = useState<formContentValidate>({});
+    const navigate = useNavigate();
 
-    const history = createBrowserHistory();
+    // const register = useSelector(
+    //     (state: RootState) => state.isRegistered.registered
+    // );
+    // const registeredAs = useSelector(
+    //     (state: RootState) => state.isRegistered.as
+    // );
 
-    const register = useSelector(
-        (state: RootState) => state.isRegistered.registered
-    );
-    const registeredAs = useSelector(
-        (state: RootState) => state.isRegistered.as
-    );
+    const { register, setRegister } = useRegisterContext();
     // console.log(register, registeredAs);
 
     const [formContent, setFormContent] =
@@ -40,39 +45,15 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
             clearTimeout(timeoutRef.current);
         }
 
-        timeoutRef.current = setTimeout(() => {
-            setFormContent({
-                ...formContent,
-                [`${e.target.name}`]: newValue,
-            });
-        }, 1000);
-    };
-    console.log(process.env.REACT_APP_URL);
-    const validate = (form: formContentType) => {
-        const newErrors: Partial<formContentValidate> = {};
-        const passwordRegex = /^(?=.*\d)(?=.*[-._])[A-Za-z\d-._]{6,16}$/;
-        const userNameRegex = /^(?=.*[A-Z])[-._a-zA-Z0-9]{4,25}$/;
-        const standard =
-            "at least \n 1 lowercase, 1 uppercase, 1 number, and 1 special character in (._-)";
-
-        if (form.userName && !userNameRegex.test(form.userName)) {
-            newErrors.userName = `Nickname must be between 4 - 25 characters that can contain  ${standard} and it should be unique for each user`;
-        }
-
-        if (form.userPass && !passwordRegex.test(form.userPass)) {
-            newErrors.userPass = `Password must be between 6 - 16 characters that include ${standard}`;
-        }
-
-        if (
-            form.checkPass &&
-            ((form.checkPass && !passwordRegex.test(form.checkPass)) ||
-                form.userPass !== form.checkPass)
-        ) {
-            newErrors.checkPass = "Passwords should match.";
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        timeoutRef.current = setTimeout(
+            () => {
+                setFormContent({
+                    ...formContent,
+                    [`${e.target.name}`]: newValue,
+                });
+            },
+            state === "Sign Up" ? 1000 : 10
+        );
     };
 
     const signInFromDB = async (
@@ -80,37 +61,19 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         form: formContentType
     ) => {
         e.preventDefault();
-        console.log(e);
-        console.log(form);
-        const url = "http://localhost:5000/api/login";
-        // const values = Object.values(form);
-
         try {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(form), // body data type must match "Content-Type" header
-            });
-            const data = await response.json();
-            console.log(data);
-            console.log(response);
-            if (response.status >= 200 && response.status < 300) {
-                // return redirect(
-                //     "http://localhost:3000/portfolio:" + `${data.userName}`
-                // );
+            const userData = await login(form);
+            localStorage.setItem("token", userData.data.accessToken);
 
-                console.log("redirect");
-                // history.push(`/portfolio?userName=${data.user.userName}`);
-                window.location.href =
-                    window.location.origin +
-                    "/portfolio?userName=" +
-                    `${data.user.userName}`;
-                //    navigate("/portfolio&userName=" + `${data.user.userName}`);
+            if (userData.status >= 200 && userData.status < 300) {
+                setRegister(userData.data.user.userName);
+                navigate("/portfolio", { replace: true });
             }
-            console.log(data);
-        } catch (error) {}
+        } catch (error) {
+            setErrors({
+                error: "An error occurred during registration.",
+            });
+        }
     };
 
     const sendRegisteredDataToDB = async (
@@ -118,72 +81,55 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         form: formContentType
     ) => {
         e.preventDefault();
-        const url = "http://localhost:5000/api/registration";
-        // console.log(JSON.stringify(form));
-        const values = Object.values(form);
+
+        const errorValues = Object.values(errors);
 
         try {
-            if (values.every((val) => !!val)) {
-                console.log("true");
+            if (!errorValues.length) {
+                const userRegister = await registration(form);
+                
+                if (userRegister.status >= 200 && userRegister.status < 300) {
+                    localStorage.setItem("token", userRegister.data.accessToken);
+                    setRegister(userRegister.data.user.userName);
+                    navigate("/portfolio", { replace: true });
+                }
 
-                const response = await fetch(url, {
-                    method: "POST", // *GET, POST, PUT, DELETE, etc.
-                    headers: {
-                        "Content-Type": "application/json",
-                        // 'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: JSON.stringify(form), // body data type must match "Content-Type" header
-                });
-
-                const data = await response.json();
-                console.log(data, response.status, "hello");
-                if (response?.status >= 400) {
-                    setErrors({ userName: data.error });
-                } else if (response?.status >= 500) {
+                if (
+                    userRegister?.status >= 400 &&
+                    userRegister?.status <= 500
+                ) {
+                    setErrors({ error: userRegister.data.error });
+                } else if (userRegister?.status >= 500) {
                     setErrors({
                         error: "An error occurred during registration.",
                     });
                 }
-
-                if (response.status >= 200 && response.status < 300) {
-                    window.location.href =
-                        window.location.origin + "/portfolio/signIn";
-                }
-
-                return data; // parses JSON response into native JavaScript objects
             }
         } catch (error) {
-            console.error(error, typeof error);
-            return error;
+            console.log("An unexpected error occurred:", error);
         }
     };
 
     useEffect(() => {
-        // console.log(formContent)
-        formContent.userName && state === "Sign Up" && validate(formContent);
+        formContent.userName &&
+            state === "Sign Up" &&
+            setErrors(validate(formContent));
     }, [formContent]);
 
-    const fetchUser = async () => {
-        const data = await fetch("http://localhost:5000/api/candidate/exists", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: JSON.stringify({
-                userName: formContent.userName,
+    const isUserExists = async () => {
+        try {
+            const user = await fetchUser({
                 key: "userName",
-            }),
-        });
-        const d = await data.json();
-
-        if (d.error) {
-            setErrors({ userName: d.error });
+                value: formContent.userName,
+            });
+            setErrors({ userName: user.data.error });
+        } catch (error) {
+            console.log("An unexpected error occurred:", error);
         }
     };
 
     useEffect(() => {
-        formContent.userName && state === "Sign Up" && fetchUser();
+        formContent.userName && state === "Sign Up" && isUserExists();
         // console.log(formContent.userName);
     }, [formContent.userName]);
 

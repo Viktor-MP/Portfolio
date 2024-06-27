@@ -3,6 +3,7 @@ import nav_utils from "../../../UtilsComp/nav/nav_utils";
 import { Link } from "react-router-dom";
 import Classes from "../../Main.module.scss";
 import classNames from "classnames";
+import { logout } from "src/services/AuthService";
 
 const Nav: FC<{ className?: string }> = ({ className = "" }) => {
     const navClasses = `
@@ -11,8 +12,10 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
     ${Classes["alCen"]}
     `;
 
-    const logout = () => {
-
+    const logoutHandler = async () => {
+        const userLogiout = await logout()
+        localStorage.removeItem("token")
+        
     }
 
 
@@ -32,7 +35,7 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
             </ul>
 
             
-            <button onClick={logout}>
+            <button onClick={logoutHandler}>
                 logout
             </button>
         </nav>

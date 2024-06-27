@@ -4,8 +4,7 @@ import MainPortfolio from "./components/NavPortfolio/MainPortfolio";
 import TodoList from "./components/NavPortfolio/ChildPorts/TodoList_Port/TodoList";
 import ErrorEl from "./components/ErrorElement/ErrorEl";
 import Registration from "./components/Registration/Registration";
-console.log(window, location.href)
-    console.log("hello");
+
 
 const routes = createBrowserRouter([
     {
@@ -22,19 +21,19 @@ const routes = createBrowserRouter([
         element: <Registration state="Sign In" comp_name="Log in" />,
     },
     {
-        path: "/portfolio/:userName",
+        path: "/portfolio/",
         element: <MainPortfolio   />,
         children: [
             {
-                path: "/portfolio/:userName/todoLit",
+                path: "/portfolio/todoLit",
                 element: <TodoList  />,
             },
-            // {
-            //     path: "/portfolio/:userStatus/todoList",
-            //     element: <TodoList />,
-            // },
+            {
+                path: "/portfolio/chat",
+                element: <TodoList />,
+            },
         ],
     },
-]);
+] );
 
 export default routes;
