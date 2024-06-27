@@ -11,7 +11,12 @@ const router = require("./src/routes/router");
 
 // access for every user
 const cors = require("cors");
-app.use(cors());
+app.use(
+    cors({
+        credentials: true,
+        origin: process.env.CLIENT_URL,
+    })
+);
 
 // Use body-parser middleware
 app.use(cookieParser());

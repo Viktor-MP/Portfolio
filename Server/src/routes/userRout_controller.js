@@ -10,20 +10,21 @@ const token_service = require("../services/token_service");
 
 class UserRout_controller {
     async checkUser(req, res, next) {
-        const { key, userName } = req.body;
-        const isUserExists = await userService.findOne(key, userName);
-
+        const { key, value } = req.body;
+        console.log(key, value, 1)
+        const isUserExists = await userService.findOne(key, value);
+        console.log(isUserExists, "isUserExists")
         if (isUserExists) {
-            return res.status(409).json({ error: "User already exists" });
+            return res.status(200).json({ error: "User already exists" });
         }
         return res
             .status(200)
-            .json({ message: `${userName} - is ready to use` });
+            .json({ message: `${value} - is ready to use` });
     }
 
     async registration(req, res, next) {
         const { userName, userPass, checkPass } = req.body;
-    
+
         // Basic validation (e.g., password match)
         if (userPass !== checkPass) {
             return res.status(400).json({ message: "Passwords do not match" });
@@ -42,7 +43,7 @@ class UserRout_controller {
             }
             return res.status(409).json({ error: "User already exists" });
         } catch (error) {
-            const errorMessage = {} // next(error.message, "message");
+            const errorMessage = {}; // next(error.message, "message");
             errorMessage.error = "An error occurred while creating the user";
 
             return res.status(500).json(errorMessage);
@@ -53,8 +54,6 @@ class UserRout_controller {
         console.log("login", req.body);
         try {
             const { userName, userPass } = req.body;
-    
-    
 
             const userData = await userService.logIn(userName, userPass);
             if (userData.user) {
@@ -63,25 +62,24 @@ class UserRout_controller {
                     httpOnly: true,
                 });
                 userData.message = " Successful login";
+                console.log("userData", userData);
                 return res.status(201).json(userData);
             }
-            console.log(userData, "userData")
-
+            console.log("userData", userData);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
     async logout(req, res, next) {
         try {
-            const {refreshToken} = req.cookies;
-            const token = await userService.logOut(refreshToken)
-            res.clearCookie("refreshToken")
-            
-            return res.json(token)
+            const { refreshToken } = req.cookies;
+            const token = await userService.logOut(refreshToken);
+            res.clearCookie("refreshToken");
 
+            return res.json(token);
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
     async refresh(req, res, next) {

@@ -53,7 +53,7 @@ class UserService {
             );
 
             return {
-                ...tokens,
+                accessToken: tokens.accessToken,
                 user: userDto,
             };
         } catch (error) {
@@ -63,14 +63,14 @@ class UserService {
     }
 
     async logIn(userName, password) {
-        console.log("logIn", userName, password);
+        // console.log("logIn", userName, password);
         try {
             const candidate = await Users.findOne({
                 where: {
                     userName,
                 },
             });
-            console.log(candidate.password, "candidate");
+            // console.log( "candidate hashed password", candidate.password,);
 
             if (!candidate) {
                 throw new Error("user not found");
@@ -80,7 +80,7 @@ class UserService {
                 password,
                 candidate.password
             );
-            console.log(isPassEquals);
+            // console.log(isPassEquals);
             if (!isPassEquals) {
                 throw new Error("password is not correct");
             }
@@ -93,18 +93,18 @@ class UserService {
                 tokens.refreshToken
             );
             return {
-                ...tokens,
+                accessToken: tokens.accessToken,
                 user: userDto,
-            }; 
+            };
         } catch (error) {
             console.log(error);
-            return error
+            return error;
         }
     }
 
-    async logOut (refreshToken) {
-            const token = await tokenService.removeToken(refreshToken)
-            return token
+    async logOut(refreshToken) {
+        const token = await tokenService.removeToken(refreshToken);
+        return token;
     }
 
     async findAll() {

@@ -12,6 +12,8 @@ router.post("/candidate/exists", UserRout_controller.checkUser);
 
 router.post("/registration", UserRout_controller.registration);
 router.post("/login", userRout_controller.login);
+router.post("/logout", userRout_controller.logout);
+
 
 
 // router.post("/logout", registrationReq);
