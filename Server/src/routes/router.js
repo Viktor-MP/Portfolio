@@ -1,8 +1,8 @@
-// const registrationReq = require("../requests/postReq/registrationPostReq");
-
 const user_service = require("../services/user_service");
-const userRout_controller = require("./userRout_controller");
 const UserRout_controller = require("./userRout_controller");
+// const {body} = require("express-validator")
+const authMiddleware = require("../middlewares/auth-middleware")
+
 
 const Router = require("express").Router;
 // console.log(UserRout_controller)
@@ -11,17 +11,9 @@ const router = new Router();
 router.post("/candidate/exists", UserRout_controller.checkUser);
 
 router.post("/registration", UserRout_controller.registration);
-router.post("/login", userRout_controller.login);
-router.post("/logout", userRout_controller.logout);
-
-
-
-// router.post("/logout", registrationReq);
-router.get("/refresh", (req, res) => {
-    res.status(200).json({
-        message: "You are registered successfully",
-        data: "hello",
-    });
-});
+router.post("/login", UserRout_controller.login);
+router.post("/logout", UserRout_controller.logout);
+router.get("/refresh", UserRout_controller.refresh);
+router.get("/users", authMiddleware , UserRout_controller.getUsers)
 
 module.exports = router;

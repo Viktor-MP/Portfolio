@@ -7,7 +7,7 @@ const path = require("path");
 const PORT = process.env.PORT || 5001;
 const bodyParser = require("body-parser");
 const router = require("./src/routes/router");
-
+const errorMiddleware = require("./src/middlewares/error-middleware")
 
 // access for every user
 const cors = require("cors");
@@ -23,8 +23,8 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "build")));
-
-app.use( "/api",router)
+app.use( "/api",router);
+app.use(errorMiddleware);
 
 
 // Front app run requests

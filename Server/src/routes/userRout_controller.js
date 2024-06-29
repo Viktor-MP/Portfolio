@@ -6,52 +6,59 @@ const Users = db.users;
 
 const userService = require("../services/user_service");
 const UserDto = require("../dtos/user-dto");
-const token_service = require("../services/token_service");
+const tokenService = require("../services/token_service");
 
 class UserRout_controller {
     async checkUser(req, res, next) {
         const { key, value } = req.body;
-        console.log(key, value, 1)
+        console.log(key, value, 1);
         const isUserExists = await userService.findOne(key, value);
-        console.log(isUserExists, "isUserExists")
+        console.log(isUserExists, "isUserExists");
         if (isUserExists) {
             return res.status(200).json({ error: "User already exists" });
         }
-        return res
-            .status(200)
-            .json({ message: `${value} - is ready to use` });
+        return res.status(200).json({ message: `${value} - is ready to use` });
     }
 
     async registration(req, res, next) {
-        const { userName, userPass, checkPass } = req.body;
-
-        // Basic validation (e.g., password match)
-        if (userPass !== checkPass) {
-            return res.status(400).json({ message: "Passwords do not match" });
-        }
-
         try {
-            const userData = await userService.registration(userName, userPass);
-            console.log(userData);
-            if (userData.user) {
-                res.cookie("refreshToken", userData.refreshToken, {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
-                    httpOnly: true,
-                });
-                userData.message = "User created successfully";
-                return res.status(201).json(userData);
-            }
-            return res.status(409).json({ error: "User already exists" });
-        } catch (error) {
-            const errorMessage = {}; // next(error.message, "message");
-            errorMessage.error = "An error occurred while creating the user";
+            const { userName, userPass, checkPass } = req.body;
 
-            return res.status(500).json(errorMessage);
+            // Basic validation (e.g., password match)
+            if (userPass !== checkPass) {
+                return res
+                    .status(400)
+                    .json({ message: "Passwords do not match" });
+            }
+
+            try {
+                const userData = await userService.registration(
+                    userName,
+                    userPass
+                );
+                console.log(userData);
+                if (userData.user) {
+                    res.cookie("refreshToken", userData.refreshToken, {
+                        maxAge: 30 * 24 * 60 * 60 * 1000,
+                        httpOnly: true,
+                    });
+                    userData.message = "User created successfully";
+                    return res.status(201).json(userData);
+                }
+                return res.status(409).json({ error: "User already exists" });
+            } catch (error) {
+                const errorMessage = {}; // next(error.message, "message");
+                errorMessage.error =
+                    "An error occurred while creating the user";
+
+                return res.status(500).json(errorMessage);
+            }
+        } catch (error) {
+            next(error);
         }
     }
 
     async login(req, res, next) {
-        console.log("login", req.body);
         try {
             const { userName, userPass } = req.body;
 
@@ -62,12 +69,10 @@ class UserRout_controller {
                     httpOnly: true,
                 });
                 userData.message = " Successful login";
-                console.log("userData", userData);
                 return res.status(201).json(userData);
             }
-            console.log("userData", userData);
         } catch (error) {
-            console.log(error);
+            next(error);
         }
     }
 
@@ -82,10 +87,37 @@ class UserRout_controller {
             next(error);
         }
     }
+
+
     async refresh(req, res, next) {
         try {
-        } catch (error) {}
+            console.log("refreshing 94")
+            const { refreshToken } = req.cookies;
+            console.log(req.cookies)
+            const userData = await userService.refreshToken(refreshToken);
+            console.log(userData, "userRout 87");
+            res.cookie("refreshToken", userData.refreshToken, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly,
+            });
+            return res.json(userData);
+        } catch (error) {
+            next(error);
+        }
     }
+
+
+    async getUsers (req, res, next) {
+        try {
+            const users  = await userService.findAll();
+            return res.json(users)
+            
+        } catch (error) {
+            next(error)
+        }
+
+    }
+
 }
 
 module.exports = new UserRout_controller();
