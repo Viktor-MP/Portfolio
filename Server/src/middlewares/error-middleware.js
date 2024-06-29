@@ -1,10 +1,9 @@
 const ApiError = require("../exceptions/api-error");
 
 module.exports = function (err, req, res, next) {
-    console.log(err);
+    console.log(err, "err, 4");
     if (err instanceof ApiError) {
-        return res.this
-            .state(err.status)
+        return res.status(err.status)
             .json({ message: err.message, errors: err.errors });
     }
     return res.status(500).json({ message: "unexpected error" });

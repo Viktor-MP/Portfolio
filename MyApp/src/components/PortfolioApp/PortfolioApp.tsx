@@ -1,10 +1,29 @@
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ClassesComb from "../../globalClasses/globalClasses";
-import Styles from "../../Styles.module.scss"
-
+import Styles from "../../Styles.module.scss";
+import { useEffect } from "react";
+import { useRegisterContext } from "src/contexts/registered_context";
+import { checkAuth } from "src/services/AuthService";
 
 const Portfolio = () => {
+    const { register, setRegister } = useRegisterContext();
+    const navigate = useNavigate();
+    useEffect(() => {
+        console.log(localStorage.getItem("token"));
+        if (localStorage.getItem("token")) {
+            console.log("item");
+            checkAuth().then((res) => {
+                if (res?.status === 200) {
+                    console.log(res);
+                    setRegister({
+                        userName: res.data.user.userName,
+                        isAuth: res.data.user.isActivated,
+                    });
+                    navigate("/portfolio", { replace: true });
+                }
+            });
+        }
+    }, []);
 
     return (
         <main

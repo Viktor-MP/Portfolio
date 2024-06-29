@@ -11,7 +11,6 @@ import {
 
 import Sign_input from "../Sign_input/Sign_input";
 import { initial_formContent } from "../UtilsComp/register/register_utils";
-// import { redirect } from "react-router-dom";
 
 import Styles from "../../Styles.module.scss";
 import { useRegisterContext } from "../../contexts/registered_context";
@@ -56,27 +55,32 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         );
     };
 
-    const signInFromDB = async (
+    const loginSurv = async (
         e: FormEvent<HTMLFormElement | HTMLButtonElement>,
         form: formContentType
     ) => {
         e.preventDefault();
         try {
             const userData = await login(form);
+            console.log(userData)
             localStorage.setItem("token", userData.data.accessToken);
 
             if (userData.status >= 200 && userData.status < 300) {
-                setRegister(userData.data.user.userName);
+                setRegister({
+                    userName: userData.data.user.userName,
+                    isAuth: true,
+                });
                 navigate("/portfolio", { replace: true });
             }
         } catch (error) {
+            console.log(error)
             setErrors({
                 error: "An error occurred during registration.",
             });
         }
     };
 
-    const sendRegisteredDataToDB = async (
+    const registrationSurv = async (
         e: FormEvent<HTMLFormElement | HTMLButtonElement>,
         form: formContentType
     ) => {
@@ -87,10 +91,16 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         try {
             if (!errorValues.length) {
                 const userRegister = await registration(form);
-                
+                console.log(userRegister)
                 if (userRegister.status >= 200 && userRegister.status < 300) {
-                    localStorage.setItem("token", userRegister.data.accessToken);
-                    setRegister(userRegister.data.user.userName);
+                    localStorage.setItem(
+                        "token",
+                        userRegister.data.accessToken
+                    );
+                    setRegister({
+                        userName: userRegister.data.user.userName,
+                        isAuth: true,
+                    });
                     navigate("/portfolio", { replace: true });
                 }
 
@@ -106,6 +116,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                 }
             }
         } catch (error) {
+            console.log(error);
             console.log("An unexpected error occurred:", error);
         }
     };
@@ -143,8 +154,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
             <form
                 onSubmit={
                     state === "Sign Up"
-                        ? (e) => sendRegisteredDataToDB(e, formContent)
-                        : (e) => signInFromDB(e, formContent)
+                        ? (e) => registrationSurv(e, formContent)
+                        : (e) => loginSurv(e, formContent)
                 }
                 className={`${ClassesComb["flex_col_cen"]} grid-cols-2 w-1/4 gap-3`}
             >

@@ -20,10 +20,6 @@ const tokenModel = (sequelize) => {
             },
             user_id: {
                 type: DataTypes.INTEGER,
-                // references: {
-                //     model: usersModel, // Reference to the User model
-                //     key: "id",
-                // },
                 allowNull: false,
             },
         },

@@ -53,7 +53,7 @@ class UserService {
             );
 
             return {
-                accessToken: tokens.accessToken,
+                ...tokens,
                 user: userDto,
             };
         } catch (error) {
@@ -93,7 +93,7 @@ class UserService {
                 tokens.refreshToken
             );
             return {
-                accessToken: tokens.accessToken,
+                ...tokens,
                 user: userDto,
             };
         } catch (error) {
@@ -108,6 +108,7 @@ class UserService {
     }
 
     async  refreshToken(refreshToken) {
+        console.log(refreshToken, "user_service 111")
         if (!refreshToken) throw ApiError.UnauthorizedError();
 
         const userData = tokenService.validateRefreshToken(refreshToken);
@@ -117,10 +118,12 @@ class UserService {
         );
 
         if (!userData || !tokenFromDB) throw ApiError.UnauthorizedError();
-
+        console.log(userData.id, "userDataId 121")
         const user = await this.findOne("id", userData.id)
+        
         console.log(user, "user_service 127")
-        const userDto = new UserDto(candidate);
+        
+        const userDto = new UserDto(user);
         const tokens = tokenService.generateToken({ ...userDto });
         await tokenService.saveToken(
             userDto.id,
@@ -128,7 +131,7 @@ class UserService {
             tokens.refreshToken
         );
         return {
-            accessToken: tokens.accessToken,
+            ...tokens,
             user: userDto,
         };
 

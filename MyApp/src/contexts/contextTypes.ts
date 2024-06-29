@@ -2,7 +2,11 @@ import React from "react";
 
 
 
-export type Register = "guest" | string;
+export type Register = {
+    
+    userName: "guest" | string
+    isAuth: boolean
+};
 
  export type registerContextTypeProps = {
     children: React.ReactNode

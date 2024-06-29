@@ -10,7 +10,10 @@ import {
 export const Register_context = createContext<registerContext | null>(null);
 
 const RegisterContextProvider = ({ children }: registerContextTypeProps) => {
-    const [register, setRegister] = useState<Register>("guest");
+    const [register, setRegister] = useState<Register>({
+        userName: "guest",
+        isAuth: false
+    });
 
     return (
         <Register_context.Provider

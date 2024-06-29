@@ -7,6 +7,7 @@ const Users = db.users;
 const userService = require("../services/user_service");
 const UserDto = require("../dtos/user-dto");
 const tokenService = require("../services/token_service");
+const ApiError = require("../exceptions/api-error");
 
 class UserRout_controller {
     async checkUser(req, res, next) {
@@ -61,8 +62,9 @@ class UserRout_controller {
     async login(req, res, next) {
         try {
             const { userName, userPass } = req.body;
-
+            console.log(64)
             const userData = await userService.logIn(userName, userPass);
+            console.log(userData, 66)
             if (userData.user) {
                 res.cookie("refreshToken", userData.refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -93,15 +95,20 @@ class UserRout_controller {
         try {
             console.log("refreshing 94")
             const { refreshToken } = req.cookies;
-            console.log(req.cookies)
+
+            if (!refreshToken) return ApiError.UnauthorizedError()
+
+            console.log(req.cookies, "cookies")
             const userData = await userService.refreshToken(refreshToken);
             console.log(userData, "userRout 87");
             res.cookie("refreshToken", userData.refreshToken, {
                 maxAge: 30 * 24 * 60 * 60 * 1000,
-                httpOnly,
+                // maxAge: 1000 * 15,
+                httpOnly: true,
             });
             return res.json(userData);
         } catch (error) {
+            // console.log(error)
             next(error);
         }
     }

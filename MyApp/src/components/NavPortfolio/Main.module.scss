@@ -58,6 +58,9 @@
         transition: var(--width-transition);
         padding: 3rem 0;
         height: var(--glob-height);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
         ul {
             list-style-type: none;
             li {
@@ -67,13 +70,14 @@
         width: 25%;
         min-width: 10rem;
 
-        a {
+        a, button {
             border-bottom: solid var(--primary) 1px;
             text-decoration: none;
             padding: 0.5rem 1rem;
             display: block;
             color: var(--gray-dark);
             transition: all 0.3s;
+            text-align: left;
         }
         a:hover {
             color: var(--orange);
