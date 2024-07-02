@@ -7,11 +7,7 @@ import { checkAuth, logout } from "src/services/AuthService";
 import { useRegisterContext } from "src/contexts/registered_context";
 
 const Nav: FC<{ className?: string }> = ({ className = "" }) => {
-    const navClasses = `
-    ${Classes["flex"]}
-    ${Classes["col"]} 
-    ${Classes["alCen"]}
-    `;
+
     const { register, setRegister } = useRegisterContext();
 
     console.log(register);
@@ -24,16 +20,18 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                 userName: "guest",
                 isAuth: false,
             });
-        } catch (error) {}
+        } catch (error) {
+            console.log(error)
+        }
     };
 
-    console.log(register.isAuth)
+
     return (
         <nav>
             <ul
                 className={classNames({
                     [className]: className,
-                    [navClasses]: !className,
+                    ["flex flex-col"]: !className,
                 })}
             >
                 {nav_utils.map((nav) => (
@@ -42,11 +40,24 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                     </li>
                 ))}
             </ul>
-                {!register.isAuth ? (
-                    <Link to={"/portfolio/signIn"}> log in </Link>
-                ) : (
-                    <button onClick={logoutHandler}>logout</button>
-                )}
+
+            <ul
+                className={classNames({
+                    [className]: className,
+                    ["flex flex-col"]: !className,
+                })}
+            >
+                <li>
+                    <Link to={"/portfolio/settings"}>Settings</Link>
+                </li>
+                <li>
+                    {!register.isAuth ? (
+                        <Link to={"/portfolio/signIn"}> Log in </Link>
+                    ) : (
+                        <button onClick={logoutHandler}>Log out</button>
+                    )}
+                </li>
+            </ul>
         </nav>
     );
 };

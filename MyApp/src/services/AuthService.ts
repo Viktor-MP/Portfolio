@@ -26,8 +26,6 @@ const logout = async(): Promise<void> => {
 const checkAuth  = async () => {
     try {
         const response = await axios.get<AuthResponse>(process.env.REACT_APP_URL + "/refresh", {withCredentials: true} );
-     
-
         localStorage.setItem("token", response.data.accessToken)
         return response
     } catch (error) {

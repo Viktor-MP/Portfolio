@@ -1,16 +1,20 @@
 const nav_utils = [
     {
-        appName: "todo list",
+        appName: "Todo list",
         appRoot: "todoList",
     },
     {
-        appName: "chess",
-        appRoot: "chess",
+        appName: "My chat",
+        appRoot: "myChat",
     },
-    {
-        appName: "tic-tac-toe",
-        appRoot: "tio_tac_toe",
-    },
+    // {
+    //     appName: "Chess",
+    //     appRoot: "chess",
+    // },
+    // {
+    //     appName: "Tic-Tac-Toe",
+    //     appRoot: "tio_tac_toe",
+    // },
 ];
 
 export default nav_utils;

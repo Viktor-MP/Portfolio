@@ -62,9 +62,9 @@ class UserRout_controller {
     async login(req, res, next) {
         try {
             const { userName, userPass } = req.body;
-            console.log(64)
+            console.log(64);
             const userData = await userService.logIn(userName, userPass);
-            console.log(userData, 66)
+            console.log(userData, 66);
             if (userData.user) {
                 res.cookie("refreshToken", userData.refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -90,15 +90,14 @@ class UserRout_controller {
         }
     }
 
-
     async refresh(req, res, next) {
         try {
-            console.log("refreshing 94")
+            console.log("refreshing 94");
             const { refreshToken } = req.cookies;
+            console.log(Boolean(refreshToken));
+            if (!Boolean(refreshToken)) throw ApiError.UnauthorizedError();
 
-            if (!refreshToken) return ApiError.UnauthorizedError()
-
-            console.log(req.cookies, "cookies")
+            console.log(refreshToken, "cookies");
             const userData = await userService.refreshToken(refreshToken);
             console.log(userData, "userRout 87");
             res.cookie("refreshToken", userData.refreshToken, {
@@ -106,25 +105,22 @@ class UserRout_controller {
                 // maxAge: 1000 * 15,
                 httpOnly: true,
             });
+
             return res.json(userData);
         } catch (error) {
             // console.log(error)
+            next(error, "userRout 115");
+        }
+    }
+
+    async getUsers(req, res, next) {
+        try {
+            const users = await userService.findAll();
+            return res.json(users);
+        } catch (error) {
             next(error);
         }
     }
-
-
-    async getUsers (req, res, next) {
-        try {
-            const users  = await userService.findAll();
-            return res.json(users)
-            
-        } catch (error) {
-            next(error)
-        }
-
-    }
-
 }
 
 module.exports = new UserRout_controller();

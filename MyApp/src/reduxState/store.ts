@@ -1,11 +1,11 @@
 import {configureStore} from "@reduxjs/toolkit";
-import signInReducer from "./signInSlice"
+import modeReducer from "./lightModeSlice"
 
 export const store = configureStore({
     reducer: {
-        isRegistered: signInReducer,
+        lightMode: modeReducer,
     },
-})
+});
 
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -12,15 +12,19 @@
     --pink: #e83e8c;
     --red: #dc3545;
     --orange: #fd7e14;
-    --yellow: #ffc107;
+    --yellow: #ffc107; // light mode buttons
     --green: #28a745;
     --teal: #20c997;
     --cyan: #17a2b8;
     --white: #fff;
     --gray: #6c757d;
-    --gray-dark: #343a40;
-    --primary: #7a8ea3;
-    --secondary: #6c757d;
+    --gray-dark: #343a40; // dark mode background
+    --primary: #7a8ea3; // light mode background
+    --secondary: #6c757d65;
+
+
+
+    
     --success: #28a745;
     --info: #17a2b8;
     --warning: #ffc107;
@@ -45,6 +49,7 @@ html {
     font-size: clamp(16px, 1.5vw, 100px);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    font-family: var( --font-family-sans-serif);
     user-select: none;
 }
 

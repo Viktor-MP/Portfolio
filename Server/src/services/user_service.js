@@ -108,7 +108,6 @@ class UserService {
     }
 
     async  refreshToken(refreshToken) {
-        console.log(refreshToken, "user_service 111")
         if (!refreshToken) throw ApiError.UnauthorizedError();
 
         const userData = tokenService.validateRefreshToken(refreshToken);
@@ -120,6 +119,9 @@ class UserService {
         if (!userData || !tokenFromDB) throw ApiError.UnauthorizedError();
         console.log(userData.id, "userDataId 121")
         const user = await this.findOne("id", userData.id)
+
+        if (!user) return ApiError.UnauthorizedError();
+
         
         console.log(user, "user_service 127")
         

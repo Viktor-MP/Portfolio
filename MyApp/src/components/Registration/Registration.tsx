@@ -1,8 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ChangeEvent, FC, FormEvent, useEffect, useRef, useState } from "react";
+import {
+    ChangeEvent,
+    FC,
+    FormEvent,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 // import { useSelector } from "react-redux";
 // import { RootState } from "../../reduxState/store";
 import ClassesComb from "../../globalClasses/globalClasses";
+import classNames from "classnames";
 import {
     formContentType,
     formContentValidate,
@@ -12,12 +21,15 @@ import {
 import Sign_input from "../Sign_input/Sign_input";
 import { initial_formContent } from "../UtilsComp/register/register_utils";
 
-import Styles from "../../Styles.module.scss";
+import Styles from "../Styles.module.scss";
 import { useRegisterContext } from "../../contexts/registered_context";
 import { useNavigate } from "react-router-dom";
 import { validate } from "./formValidate";
 import { fetchUser } from "src/services/UserService";
-import { login, registration } from "src/services/AuthService";
+import { checkAuth, login, registration } from "src/services/AuthService";
+import { RootState } from "src/reduxState/store";
+import { useSelector, useDispatch } from "react-redux";
+// import { setMode } from "src/reduxState/lightModeSlice";
 
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     console.log(state);
@@ -25,13 +37,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const [errors, setErrors] = useState<formContentValidate>({});
     const navigate = useNavigate();
 
-    // const register = useSelector(
-    //     (state: RootState) => state.isRegistered.registered
-    // );
-    // const registeredAs = useSelector(
-    //     (state: RootState) => state.isRegistered.as
-    // );
-
+    const mode = useSelector((state: RootState) => state.lightMode.lightMode);
+    const dispatch = useDispatch();
     const { register, setRegister } = useRegisterContext();
     // console.log(register, registeredAs);
 
@@ -62,7 +69,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         e.preventDefault();
         try {
             const userData = await login(form);
-            console.log(userData)
+            console.log(userData);
             localStorage.setItem("token", userData.data.accessToken);
 
             if (userData.status >= 200 && userData.status < 300) {
@@ -70,10 +77,10 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                     userName: userData.data.user.userName,
                     isAuth: true,
                 });
-                navigate("/portfolio", { replace: true });
+                navigate("/portfolio/todoList", { replace: true });
             }
         } catch (error) {
-            console.log(error)
+            console.log(error);
             setErrors({
                 error: "An error occurred during registration.",
             });
@@ -91,7 +98,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         try {
             if (!errorValues.length) {
                 const userRegister = await registration(form);
-                console.log(userRegister)
+                console.log(userRegister);
                 if (userRegister.status >= 200 && userRegister.status < 300) {
                     localStorage.setItem(
                         "token",
@@ -101,7 +108,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                         userName: userRegister.data.user.userName,
                         isAuth: true,
                     });
-                    navigate("/portfolio", { replace: true });
+                    navigate("/portfolio/todoList", { replace: true });
                 }
 
                 if (
@@ -121,11 +128,28 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         }
     };
 
+
     useEffect(() => {
         formContent.userName &&
             state === "Sign Up" &&
             setErrors(validate(formContent));
     }, [formContent]);
+
+
+    useLayoutEffect(() => {
+      if (localStorage.getItem("token")) {
+          checkAuth().then((res) => {
+              if (res?.status === 200) {
+                  console.log(res);
+                  setRegister({
+                      userName: res.data.user.userName,
+                      isAuth: res.data.user.isActivated,
+                  });
+                  navigate("/portfolio/todoList", { replace: true });
+              }
+          });
+      }
+    }, [])
 
     const isUserExists = async () => {
         try {
@@ -146,7 +170,12 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
 
     return (
         <main
-            className={` bg-primary min-h-dvh ${ClassesComb["flex_col_cen"]} min-h-dvh gap-6`}
+            className={` ${
+                ClassesComb["flex_col_cen"]
+            } min-h-dvh gap-8 ${classNames({
+                [Styles["comp_light"]]: mode,
+                [Styles["comp_dark"]]: !mode,
+            })}`}
         >
             <h2 className={`text-3xl ${Styles["heading_anim"]}`}>
                 {comp_name}
@@ -157,7 +186,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                         ? (e) => registrationSurv(e, formContent)
                         : (e) => loginSurv(e, formContent)
                 }
-                className={`${ClassesComb["flex_col_cen"]} grid-cols-2 w-1/4 gap-3`}
+                className={`${ClassesComb["flex_col_cen"]} grid-cols-2 w-1/4 gap-6`}
             >
                 <Sign_input
                     error={errors.userName}
@@ -191,7 +220,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                 {errors.error && <p>{errors.error}</p>}
 
                 <button
-                    className={`${ClassesComb["submit_btn"]}`}
+                    className={`${Styles["signRef"]}`}
                     type="submit"
                 >
                     {state}
