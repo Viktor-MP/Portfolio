@@ -5,14 +5,19 @@ import {
     Register,
     registerContext,
     registerContextTypeProps,
-} from "./contextTypes";
+} from "./registrationTypes";
+import { navOpenContext, navOpenType } from "./navOpenTypes";
 
 export const Register_context = createContext<registerContext | null>(null);
+export const NavOpen_context = createContext<navOpenContext | null>(null);
 
 const RegisterContextProvider = ({ children }: registerContextTypeProps) => {
     const [register, setRegister] = useState<Register>({
         userName: "guest",
-        isAuth: false
+        isAuth: false,
+    });
+    const [navOpen, setNavOpen] = useState<navOpenType>({
+        state: false,
     });
 
     return (
@@ -22,7 +27,14 @@ const RegisterContextProvider = ({ children }: registerContextTypeProps) => {
                 setRegister,
             }}
         >
-            {children}
+            <NavOpen_context.Provider
+                value={{
+                    navOpen,
+                    setNavOpen,
+                }}
+            >
+                {children}
+            </NavOpen_context.Provider>
         </Register_context.Provider>
     );
 };
@@ -37,5 +49,15 @@ export const useRegisterContext = () => {
 
     return context;
 };
+
+export const useOpenContext = () => {
+    const context = useContext(NavOpen_context);
+    if (!context) {
+        throw new Error(
+            "useOpenContext must be used within a RegisterContextProvider"
+        );
+    }
+    return context
+}
 
 export default RegisterContextProvider;

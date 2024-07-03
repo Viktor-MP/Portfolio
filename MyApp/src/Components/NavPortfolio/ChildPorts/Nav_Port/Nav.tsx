@@ -1,16 +1,24 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { FC, useEffect } from "react";
 import nav_utils from "./nav_utils";
 import { Link, useNavigate } from "react-router-dom";
 import Classes from "../../Main.module.scss";
 import classNames from "classnames";
 import { checkAuth, logout } from "src/services/AuthService";
-import { useRegisterContext } from "src/contexts/registered_context";
+import { useOpenContext, useRegisterContext } from "src/contexts/registered_context";
 import { providerPath as path } from "../../../../indexPath";
+
+
+import { IoIosArrowDroprightCircle } from "react-icons/io";
+
 
 const Nav: FC<{ className?: string }> = ({ className = "" }) => {
     const { register, setRegister } = useRegisterContext();
     const navigate = useNavigate();
-    console.log(register);
+
+    const { navOpen, setNavOpen} = useOpenContext();
+    console.log(navOpen.state)
 
     const logoutHandler = async () => {
         try {
@@ -27,15 +35,20 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
         }
     };
 
+    const navBarHandler = () => setNavOpen({state: !navOpen.state})
+
     return (
         <nav
             className={`${classNames({
                 [className]: className,
+                ["open"]: navOpen.state,
             })}`}
         >
-            <div className={`${classNames({
-                 [Classes["navList"]]: !className,
-            })}`}>
+            <div
+                className={`${classNames({
+                    [Classes["navList"]]: !className,
+                })}`}
+            >
                 <ul
                     className={classNames({
                         ["flex flex-col"]: !className,
@@ -65,12 +78,19 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                     </li>
                 </ul>
             </div>
-            <div className={`${
-                classNames({
-                    [Classes["navController"]]: !className
-                })
-            }`}>
-                <span>{">"}</span>
+            <div
+                className={` ${classNames({
+                    [Classes["navController"]]: !className,
+                })}`}
+            >
+                <span
+                    className={`${classNames({
+                        [Classes["scale-1"]]: navOpen.state,
+                    })}`}
+                    onClick={navBarHandler}
+                >
+                    <IoIosArrowDroprightCircle />
+                </span>
             </div>
         </nav>
     );

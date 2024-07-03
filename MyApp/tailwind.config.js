@@ -26,7 +26,7 @@ module.exports = {
             dark: "#343a40",
             sky: "#38BDF8",
             error: "#cc0000",
-            success: "#4bb543"
+            success: "#4bb543",
         },
         "min-height": {
             "min-h-dvh": "100dvh",
@@ -40,4 +40,3 @@ module.exports = {
     },
     plugins: [],
 };
-

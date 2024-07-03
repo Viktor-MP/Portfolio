@@ -17,8 +17,11 @@ const EditableComponent: FC<editablePropsType> = ({
 
     console.log(targetVal);
     return (
-        <div className={`${className ?? className} flex px-4 py-2 bg-yellow `}>
-            <span>My</span>{" "}
+        <div className={`${classNames({
+            [`${className}`]:className,
+            [`${"str"} flex px-4 py-2 bg-yellow `]: !className
+        })} `}>
+            <span>My</span>
             <input
                 className="bg-yellow"
                 autoFocus
