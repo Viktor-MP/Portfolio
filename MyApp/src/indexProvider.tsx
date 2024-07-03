@@ -1,14 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
-import PortfolioApp from "./components/PortfolioApp/PortfolioApp";
-import MainPortfolio from "./components/NavPortfolio/MainPortfolio";
-import TodoBoard from "./components/NavPortfolio/ChildPorts/TodoList_Port/TodoBoard";
-import ErrorEl from "./components/ErrorElement/ErrorEl";
-import Registration from "./components/Registration/Registration";
-import Settings from "./components/Settings/Settings";
-import {providerPath as path} from "./indexPath" ;
+import PortfolioApp from "./Components/PortfolioApp/PortfolioApp";
+import MainPortfolio from "./Components/NavPortfolio/MainPortfolio";
+import TodoBoard from "./Components/NavPortfolio/ChildPorts/TodoBoard/TodoBoard";
+import ErrorEl from "./Components/ErrorElement/ErrorEl";
+import Registration from "./Components/Registration/Registration";
+import Settings from "./Components/Settings/Settings";
+import { providerPath as path } from "./indexPath";
 
-
-console.log(path.todoBoard())
+console.log(path.todoBoard());
 const routes = createBrowserRouter([
     {
         path: "/",

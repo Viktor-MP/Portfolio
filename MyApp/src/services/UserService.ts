@@ -1,4 +1,4 @@
-import { formContentType } from "../components/Registration/register_Types";
+import { formContentType } from "../Components/Registration/register_Types";
 import {
     AuthResponse,
     IUsers,

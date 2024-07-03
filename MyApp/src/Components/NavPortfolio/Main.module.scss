@@ -1,0 +1,119 @@
+// ============== global classes ===============
+
+:root {
+    --glob-height: 100vh;
+    --nav-width: 25%;
+    --action-width-c: 100%;
+    --action-width-o: 75%;
+    --width-transition: transform 0.5s, width 0.5s;
+}
+
+// =============================================
+
+.action {
+    min-height: var(--glob-height);
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    button[class=""] + nav {
+        transform: translateX(-100%);
+    }
+    button[class="open"] + nav {
+        transform: translateX(0);
+    }
+    button[class=""] ~ section {
+        width: var(--action-width-c);
+    }
+    button[class="open"] ~ section {
+        width: var(--action-width-o);
+    }
+
+    nav {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: var(--secondary);
+        transition: var(--width-transition);
+        width: 25%;
+        min-width: 10rem;
+
+        display: flex;
+        // flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+
+        .navList {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+
+            height: var(--glob-height);
+            padding: 4rem 0;
+            width: 100%;
+        }
+        .navController {
+            position: relative;
+            transform: translateX(100%);
+            height: var(--glob-height);
+            display: flex;
+            align-items: center;
+            transition: all 0.2s;
+            position: absolute;
+            right: 0;
+            background: transparent;
+            span {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 2rem;
+                padding: 1rem 0.5rem 1rem 0;
+                aspect-ratio: 1 / 1;
+
+                border-radius: 0 2rem 2rem 0;
+                transition: all 0.2s;
+                text-align: left;
+            }
+
+            span:hover {
+     
+                padding-left: 0.5rem;
+                border: solid var(--gray-dark) 1.5px;
+                border-left: none;
+            }
+         
+            
+        }
+        .navController:has(> span:hover) {
+            border-right: solid var(--gray-dark ) 1px;
+        }
+
+        ul {
+            list-style-type: none;
+            width: 90%;
+        }
+
+        a,
+        button {
+            border-bottom: solid var(--primary) 1px;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+            width: 100%;
+            color: var(--gray-dark);
+            transition: all 0.3s;
+            text-align: left;
+        }
+        a:hover,
+        button:hover {
+            color: var(--orange);
+            background-color: var(--primary);
+        }
+    }
+
+    section {
+        transition: var(--width-transition);
+        height: var(--glob-height);
+    }
+}
