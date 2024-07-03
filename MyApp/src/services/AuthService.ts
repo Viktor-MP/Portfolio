@@ -1,10 +1,9 @@
-import { formContentType } from "../components/UtilsComp/register/register_Types";
+import { formContentType } from "../components/Registration/register_Types";
 import { AuthResponse } from "../modules/response/AuthResponse";
 
 import $api from "../axios/axios";
 import axios from "axios";
 import { AxiosResponse } from "axios";
-
 
 const login = async (
     form: formContentType
@@ -18,19 +17,21 @@ const registration = async (
     return $api.post<AuthResponse>("/registration", form);
 };
 
-const logout = async(): Promise<void> => {
-    return $api.post("/logout")
-}
+const logout = async (): Promise<void> => {
+    return $api.post("/logout");
+};
 
-
-const checkAuth  = async () => {
+const checkAuth = async () => {
     try {
-        const response = await axios.get<AuthResponse>(process.env.REACT_APP_URL + "/refresh", {withCredentials: true} );
-        localStorage.setItem("token", response.data.accessToken)
-        return response
+        const response = await axios.get<AuthResponse>(
+            process.env.REACT_APP_URL + "/refresh",
+            { withCredentials: true }
+        );
+        localStorage.setItem("token", response.data.accessToken);
+        return response;
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
 export { login, registration, logout, checkAuth };

@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import PortfolioApp from "./components/PortfolioApp/PortfolioApp";
 import MainPortfolio from "./components/NavPortfolio/MainPortfolio";
-import TodoList from "./components/NavPortfolio/ChildPorts/TodoList_Port/TodoList";
+import TodoBoard from "./components/NavPortfolio/ChildPorts/TodoList_Port/TodoBoard";
 import ErrorEl from "./components/ErrorElement/ErrorEl";
 import Registration from "./components/Registration/Registration";
 import Settings from "./components/Settings/Settings";
+import {providerPath as path} from "./indexPath" ;
 
 
+console.log(path.todoBoard())
 const routes = createBrowserRouter([
     {
         path: "/",
@@ -26,20 +28,20 @@ const routes = createBrowserRouter([
         element: <MainPortfolio />,
         children: [
             {
-                path: "/portfolio/todoList",
-                element: <TodoList />,
+                path: path.todoBoard(),
+                element: <TodoBoard />,
             },
             {
-                path: "/portfolio/myChat",
-                element: <TodoList />,
+                path: path.myChat(),
+                element: <TodoBoard />,
             },
             {
-                path: "/portfolio/settings",
+                path: path.settings(),
                 element: <Settings />,
             },
             {
-                path: "/portfolio/guest/",
-                element: <TodoList />,
+                path: path.guest(),
+                element: <TodoBoard />,
             },
         ],
     },

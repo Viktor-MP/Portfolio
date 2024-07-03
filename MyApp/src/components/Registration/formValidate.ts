@@ -1,4 +1,4 @@
-import { formContentType, formContentValidate } from "../UtilsComp/register/register_Types";
+import { formContentType, formContentValidate } from "./register_Types";
 
 const validate = (form: formContentType) => {
     const newErrors: Partial<formContentValidate> = {};
@@ -27,7 +27,4 @@ const validate = (form: formContentType) => {
     return newErrors;
 };
 
-
-
-
-export {validate}
+export { validate };

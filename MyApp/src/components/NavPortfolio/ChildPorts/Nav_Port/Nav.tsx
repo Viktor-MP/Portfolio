@@ -1,15 +1,15 @@
 import React, { FC, useEffect } from "react";
-import nav_utils from "../../../UtilsComp/nav/nav_utils";
+import nav_utils from "./nav_utils";
 import { Link, useNavigate } from "react-router-dom";
 import Classes from "../../Main.module.scss";
 import classNames from "classnames";
 import { checkAuth, logout } from "src/services/AuthService";
 import { useRegisterContext } from "src/contexts/registered_context";
+import { providerPath as path } from "../../../../indexPath";
 
 const Nav: FC<{ className?: string }> = ({ className = "" }) => {
-
     const { register, setRegister } = useRegisterContext();
-
+    const navigate = useNavigate();
     console.log(register);
 
     const logoutHandler = async () => {
@@ -20,11 +20,12 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                 userName: "guest",
                 isAuth: false,
             });
+            // console.log(userLogout)
+            navigate(path.base, { replace: true });
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
-
 
     return (
         <nav>
@@ -48,11 +49,11 @@ const Nav: FC<{ className?: string }> = ({ className = "" }) => {
                 })}
             >
                 <li>
-                    <Link to={"/portfolio/settings"}>Settings</Link>
+                    <Link to={path.settings()}>Settings</Link>
                 </li>
                 <li>
                     {!register.isAuth ? (
-                        <Link to={"/portfolio/signIn"}> Log in </Link>
+                        <Link to={path.signIn()}> Log in </Link>
                     ) : (
                         <button onClick={logoutHandler}>Log out</button>
                     )}

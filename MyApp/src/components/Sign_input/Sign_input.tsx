@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import { input_Types } from "../UtilsComp/register/register_Types";
+import { input_Types } from "../Registration/register_Types";
 
 // react icons
 // Eye icons

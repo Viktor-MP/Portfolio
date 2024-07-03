@@ -13,6 +13,8 @@ import { checkAuth, logout } from "src/services/AuthService";
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../reduxState/store";
+import { providerPath as path } from "../../indexPath";
+
 import { setMode } from "src/reduxState/lightModeSlice";
 
 const Portfolio = () => {
@@ -48,20 +50,18 @@ const Portfolio = () => {
         }
     }, []);
 
-
-      const logoutHandler = async () => {
-          try {
-              const userLogout = await logout();
-              localStorage.removeItem("token");
-              setRegister({
-                  userName: "guest",
-                  isAuth: false,
-              });
-          } catch (error) {
-              console.log(error);
-          }
-      };
-
+    const logoutHandler = async () => {
+        try {
+            const userLogout = await logout();
+            localStorage.removeItem("token");
+            setRegister({
+                userName: "guest",
+                isAuth: false,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <main
@@ -80,7 +80,7 @@ const Portfolio = () => {
                     You can{" "}
                     <Link
                         className={`${ClassesComb["link_un_line"]} `}
-                        to={"/portfolio/signUp"}
+                        to={path.signUp()}
                     >
                         sign up
                     </Link>{" "}
@@ -91,23 +91,17 @@ const Portfolio = () => {
                     If not continue as a{" "}
                     <Link
                         className={`${ClassesComb["link_un_line"]} `}
-                        to={"/portfolio/guest"}
+                        to={path.guest()}
                     >
                         Guest
                     </Link>
                     {/* <BsArrow90DegRight className="arrow" /> */}
                 </p>
                 <div className="flex justify-evenly w-full ">
-                    <Link
-                        className={Styles["signRef"]}
-                        to={"/portfolio/signIn"}
-                    >
+                    <Link className={Styles["signRef"]} to={path.signIn()}>
                         Sign in
                     </Link>
-                    <Link
-                        className={Styles["signRef"]}
-                        to={"/portfolio/signUp"}
-                    >
+                    <Link className={Styles["signRef"]} to={path.signUp()}>
                         Sign up
                     </Link>
                 </div>
@@ -121,7 +115,7 @@ const Portfolio = () => {
                         You are logged in as{" "}
                         <Link
                             className={`${ClassesComb["link_un_line"]} `}
-                            to={"/portfolio/todoList"}
+                            to={path.todoBoard()}
                         >
                             {register.userName}
                         </Link>{" "}

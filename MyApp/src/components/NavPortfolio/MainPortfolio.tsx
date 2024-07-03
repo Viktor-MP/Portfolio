@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 import Classes from "./Main.module.scss";
 import classNames from "classnames";
 import NavBurger from "../NavBurger/NavBurger";
-import { mainPropsType } from "../UtilsComp/main/main_Types";
+import { mainPropsType } from "./ChildPorts/main_Types";
 import { useRegisterContext } from "../../contexts/registered_context";
 import { checkAuth } from "src/services/AuthService";
 

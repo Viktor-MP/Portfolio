@@ -1,11 +1,13 @@
+import { providerPath as path } from "../../../../indexPath";
+
 const nav_utils = [
     {
-        appName: "Todo list",
-        appRoot: "todoList",
+        appName: "Todo board",
+        appRoot: path.todoBoard(),
     },
     {
         appName: "My chat",
-        appRoot: "myChat",
+        appRoot: path.myChat(),
     },
     // {
     //     appName: "Chess",

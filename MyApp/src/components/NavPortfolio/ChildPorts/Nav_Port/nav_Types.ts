@@ -1,9 +1,9 @@
-export interface NavUtilsType {
+export type NavUtilsType = {
     appName: string;
     appRoot: string;
 };
 
-export interface NavType {
+export type NavType = {
     navigation: NavUtilsType[];
 };
 

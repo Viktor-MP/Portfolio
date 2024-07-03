@@ -16,10 +16,10 @@ import {
     formContentType,
     formContentValidate,
     registerTypes,
-} from "../UtilsComp/register/register_Types";
+} from "./register_Types";
 
 import Sign_input from "../Sign_input/Sign_input";
-import { initial_formContent } from "../UtilsComp/register/register_utils";
+import { initial_formContent } from "./register_utils";
 
 import Styles from "../Styles.module.scss";
 import { useRegisterContext } from "../../contexts/registered_context";
@@ -29,7 +29,8 @@ import { fetchUser } from "src/services/UserService";
 import { checkAuth, login, registration } from "src/services/AuthService";
 import { RootState } from "src/reduxState/store";
 import { useSelector, useDispatch } from "react-redux";
-// import { setMode } from "src/reduxState/lightModeSlice";
+
+import { providerPath as path } from "../../indexPath";
 
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     console.log(state);
@@ -38,9 +39,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const navigate = useNavigate();
 
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
-    const dispatch = useDispatch();
+
     const { register, setRegister } = useRegisterContext();
-    // console.log(register, registeredAs);
 
     const [formContent, setFormContent] =
         useState<formContentType>(initial_formContent);
@@ -77,7 +77,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                     userName: userData.data.user.userName,
                     isAuth: true,
                 });
-                navigate("/portfolio/todoList", { replace: true });
+                navigate(path.todoBoard(), { replace: true });
             }
         } catch (error) {
             console.log(error);
@@ -108,7 +108,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                         userName: userRegister.data.user.userName,
                         isAuth: true,
                     });
-                    navigate("/portfolio/todoList", { replace: true });
+                    navigate(path.todoBoard(), { replace: true });
                 }
 
                 if (
@@ -128,28 +128,26 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         }
     };
 
-
     useEffect(() => {
         formContent.userName &&
             state === "Sign Up" &&
             setErrors(validate(formContent));
     }, [formContent]);
 
-
     useLayoutEffect(() => {
-      if (localStorage.getItem("token")) {
-          checkAuth().then((res) => {
-              if (res?.status === 200) {
-                  console.log(res);
-                  setRegister({
-                      userName: res.data.user.userName,
-                      isAuth: res.data.user.isActivated,
-                  });
-                  navigate("/portfolio/todoList", { replace: true });
-              }
-          });
-      }
-    }, [])
+        if (localStorage.getItem("token")) {
+            checkAuth().then((res) => {
+                if (res?.status === 200) {
+                    console.log(res);
+                    setRegister({
+                        userName: res.data.user.userName,
+                        isAuth: res.data.user.isActivated,
+                    });
+                    navigate(path.todoBoard(), { replace: true });
+                }
+            });
+        }
+    }, []);
 
     const isUserExists = async () => {
         try {
@@ -219,10 +217,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                 )}
                 {errors.error && <p>{errors.error}</p>}
 
-                <button
-                    className={`${Styles["signRef"]}`}
-                    type="submit"
-                >
+                <button className={`${Styles["signRef"]}`} type="submit">
                     {state}
                 </button>
             </form>
