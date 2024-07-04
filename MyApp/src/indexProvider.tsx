@@ -7,7 +7,6 @@ import Registration from "./Components/Registration/Registration";
 import Settings from "./Components/Settings/Settings";
 import { providerPath as path } from "./indexPath";
 
-console.log(path.todoBoard());
 const routes = createBrowserRouter([
     {
         path: "/",

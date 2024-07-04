@@ -44,7 +44,7 @@ const Portfolio = () => {
                         userName: res.data.user.userName,
                         isAuth: res.data.user.isActivated,
                     });
-                    // navigate("/portfolio/todoList", { replace: true });
+                    navigate(path.todoBoard(), { replace: true });
                 }
             });
         }
@@ -107,7 +107,7 @@ const Portfolio = () => {
                 </div>
                 {/* <button onClick={modeChanger}>change mode</button> */}
             </div>
-            {register.isAuth && (
+            {/* {register.isAuth && (
                 <div
                     className={` flex flex-col items-center blur-0 content-between gap-4 ${Styles["user_loggedIn"]}`}
                 >
@@ -128,7 +128,7 @@ const Portfolio = () => {
                         Log out
                     </button>{" "}
                 </div>
-            )}
+            )} */}
         </main>
     );
 };

@@ -21,7 +21,6 @@ import {
 } from "./register_Types";
 import { initial_formContent } from "./register_utils";
 
-
 import Sign_input from "../Sign_input/Sign_input";
 import { useRegisterContext } from "../../contexts/registered_context";
 import { useNavigate } from "react-router-dom";
@@ -30,8 +29,10 @@ import { validate } from "./formValidate";
 import { fetchUser } from "src/services/UserService";
 import { checkAuth, login, registration } from "src/services/AuthService";
 
-
 import { providerPath as path } from "../../indexPath";
+import { data } from "autoprefixer";
+import { useDispatch } from "react-redux";
+import { setMode } from "src/reduxState/lightModeSlice";
 
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     console.log(state);
@@ -40,6 +41,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const navigate = useNavigate();
 
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
+    const dispatch = useDispatch();
 
     const { register, setRegister } = useRegisterContext();
 
@@ -49,6 +51,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const formContent_handler = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         if (timeoutRef.current) {
+            setErrors({})
             clearTimeout(timeoutRef.current);
         }
 
@@ -71,14 +74,25 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         try {
             const userData = await login(form);
             console.log(userData);
-            localStorage.setItem("token", userData.data.accessToken);
+            if (userData?.status === 201) {
+                userData.data.accessToken &&
+                    localStorage.setItem("token", userData.data.accessToken);
 
-            if (userData.status >= 200 && userData.status < 300) {
-                setRegister({
-                    userName: userData.data.user.userName,
-                    isAuth: true,
-                });
+                userData.data.user &&
+                    setRegister({
+                        userName: userData.data.user.userName,
+                        isAuth: true,
+                    });
                 navigate(path.todoBoard(), { replace: true });
+            } else if (userData?.status === 401) {
+                setErrors({
+                    userPass: userData.data.message,
+                });
+            }else if (userData?.status === 404) {
+             
+                setErrors({
+                    userName: userData.data.message,
+                });
             }
         } catch (error) {
             console.log(error);
@@ -99,16 +113,17 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         try {
             if (!errorValues.length) {
                 const userRegister = await registration(form);
-                console.log(userRegister);
+                console.log(userRegister.data.accessToken);
+                const token = userRegister.data.accessToken;
+                const name =
+                    userRegister.data.user && userRegister.data.user.userName;
                 if (userRegister.status >= 200 && userRegister.status < 300) {
-                    localStorage.setItem(
-                        "token",
-                        userRegister.data.accessToken
-                    );
-                    setRegister({
-                        userName: userRegister.data.user.userName,
-                        isAuth: true,
-                    });
+                    token && localStorage.setItem("token", token);
+                    name &&
+                        setRegister({
+                            userName: name,
+                            isAuth: true,
+                        });
                     navigate(path.todoBoard(), { replace: true });
                 }
 
@@ -136,6 +151,10 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     }, [formContent]);
 
     useLayoutEffect(() => {
+        const localModeState = localStorage.getItem("isLightMode");
+        if (localModeState === "true") dispatch(setMode(true));
+        else if (localModeState === "false") dispatch(setMode(false));
+
         if (localStorage.getItem("token")) {
             checkAuth().then((res) => {
                 if (res?.status === 200) {
@@ -166,7 +185,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         formContent.userName && state === "Sign Up" && isUserExists();
         // console.log(formContent.userName);
     }, [formContent.userName]);
-
+    
     return (
         <main
             className={` ${

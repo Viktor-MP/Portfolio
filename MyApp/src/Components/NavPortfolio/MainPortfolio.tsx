@@ -16,7 +16,7 @@ const MainPortfolio: FC<mainPropsType> = ({ className = "" }) => {
 
 
     const { register, setRegister } = useRegisterContext();
-
+    console.log("Main component")
     useEffect(() => {
         console.log(localStorage.getItem("token"));
         if (localStorage.getItem("token")) {

@@ -70,8 +70,11 @@ class UserRout_controller {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true,
                 });
-                userData.message = " Successful login";
+                userData.message = "Successful login";
                 return res.status(201).json(userData);
+            } else {
+                console.log(userData, 76)
+                return res.status(userData.status).json(userData)
             }
         } catch (error) {
             next(error);

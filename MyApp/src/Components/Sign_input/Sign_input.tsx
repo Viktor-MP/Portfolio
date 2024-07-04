@@ -38,7 +38,7 @@ const Sign_input: FC<input_Types> = ({
             setTyping(false);
         }, 1000);
     };
-
+    
     return (
         <div className="flex justify-center items-center relative">
             <div title={error} className="aspect-square w-8 absolute -left-8">

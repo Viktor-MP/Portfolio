@@ -60,16 +60,12 @@
     }
 }
 
-.comp_light,
-.comp_dark {
-        button {
-            color: var(--dark-dark);
-        }
-}
-
 .comp_dark {
     @include bg_dark();
 
+    form {
+        color: var(--dark-dark);
+    }
     .heading_anim {
         @include animGradient(--light, --gray-dark, textBackground_dark);
     }
@@ -89,10 +85,8 @@
     filter: blur(0);
 }
 
-
 .user_loggedIn {
     button.signRef {
-
         filter: blur(0);
     }
 }

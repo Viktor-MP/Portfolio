@@ -73,7 +73,7 @@ class UserService {
             // console.log( "candidate hashed password", candidate.password,);
 
             if (!candidate) {
-                throw new Error("user not found");
+               return {message: "user not found", status: 404};
             }
 
             const isPassEquals = await bcrypt.compare(
@@ -82,7 +82,7 @@ class UserService {
             );
             // console.log(isPassEquals);
             if (!isPassEquals) {
-                throw new Error("password is not correct");
+                return {message: "password is not correct", status: 401};
             }
 
             const userDto = new UserDto(candidate);
