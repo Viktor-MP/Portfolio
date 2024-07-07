@@ -1,0 +1,50 @@
+@import "./Global.module.scss";
+
+.comp_light {
+    @include bg_light();
+
+    .heading_anim {
+        @include animGradient(--dark-dark, --gray, textBackground_light);
+    }
+    .signRef {
+        @include sign_In_UP(--orange, --light);
+    }
+
+    @keyframes textBackground_light {
+        100% {
+            @include anim100(--dark);
+        }
+    }
+}
+
+.comp_dark {
+    @include bg_dark();
+
+    form {
+        color: var(--dark-dark);
+    }
+
+    .heading_anim {
+        @include animGradient(--light, --gray-dark, textBackground_dark);
+    }
+
+    .signRef {
+        @include sign_In_UP(--gray, --white);
+    }
+
+    @keyframes textBackground_dark {
+        100% {
+            @include anim100(--white);
+        }
+    }
+}
+
+.signRef:hover {
+    filter: blur(0);
+}
+
+.user_loggedIn {
+    button.signRef {
+        filter: blur(0);
+    }
+}

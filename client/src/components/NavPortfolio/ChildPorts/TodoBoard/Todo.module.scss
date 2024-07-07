@@ -1,0 +1,38 @@
+.board {
+
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    min-height: 100dvh;
+
+
+    .container {
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0 0 0 ;
+        gap: 1rem;
+
+        h2 {
+            margin: 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        // justify-content: center;
+        // align-items: center;
+
+        .tables {
+            display: flex;
+            flex-wrap: wrap;
+
+            .table {
+                border-radius: 0.5rem;
+                width: 30%;
+                aspect-ratio:  1 / 0.6;
+                border: solid;
+              
+            }
+        }
+
+    }
+}
