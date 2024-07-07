@@ -2,11 +2,14 @@
 
 import { createContext, useContext, useState } from "react";
 import {
-    Register,
-    registerContext,
+    navOpenContext,
+    navOpenType,
+} from "./contextTypes/index";
+import {
     registerContextTypeProps,
-} from "./registrationTypes";
-import { navOpenContext, navOpenType } from "./navOpenTypes";
+    registerContext,
+    Register,
+} from "./contextTypes/index";
 
 export const Register_context = createContext<registerContext | null>(null);
 export const NavOpen_context = createContext<navOpenContext | null>(null);

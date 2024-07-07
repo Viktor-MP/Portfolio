@@ -1,0 +1,19 @@
+@import "../Global.module.scss";
+
+.edit_light {
+    @include bg_light();
+    h2 {
+        color: var(--danger);
+    }
+}
+
+.edit_dark {
+    @include bg_dark();
+    h2 {
+        color: var(--danger);
+    }
+}
+
+.signRef {
+    @include sign_In_UP(--orange, --light);
+}

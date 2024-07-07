@@ -1,0 +1,21 @@
+@import "../../Global.module.scss";
+
+.parentInput {
+    display: flex;
+    position: relative;
+    width: 15%;
+    min-width: min-content;
+
+    input {
+        color: inherit;
+        background-color: inherit;
+        width: 100%;
+    }
+    svg {
+        position: absolute;
+        top: 50%;
+        translate: 0 -50%;
+        right: 0.5rem;
+    }
+}
+

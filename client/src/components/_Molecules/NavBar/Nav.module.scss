@@ -1,0 +1,119 @@
+@import "../../Global.module.scss";
+
+.nav_light {
+    @include bg_light();
+    li {
+        border-bottom: solid var(--gray-dark) 1px;
+    }
+    li:hover {
+        color: var(--orange);
+        background-color: var(--gray-dark);
+    }
+}
+.nav_dark {
+    @include bg_dark();
+    li {
+        border-bottom: solid var(--light) 1px;
+    }
+    li:hover {
+        color: var(--white);
+        background-color: var(--gray);
+    }
+}
+
+nav {
+    z-index: 1;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: var(--secondary);
+    transition: var(--width-transition);
+    width: var(--nav-width);
+    min-width: 10rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .navList {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+
+        height: var(--glob-height);
+        padding: 4rem 0;
+        width: 100%;
+    }
+    .navController {
+        transform: translateX(100%);
+        transition: all 0.2s;
+        position: absolute;
+        right: 0;
+
+        height: var(--glob-height);
+        display: flex;
+        align-items: center;
+        background: transparent;
+
+        span {
+            position: absolute;
+            top: 50%;
+            translate: 0 -50%;
+            width: 2rem;
+            padding: 1rem 0.5rem 1rem 0;
+            aspect-ratio: 1 / 1;
+            transition: all 0.3s, scale 0.8s;
+            text-align: left;
+            font-size: 0.5rem;
+            color: var(--gray-dark);
+            transform-origin: center left;
+        }
+
+        span.scale-1 {
+            font-size: 1rem;
+            scale: -1 1;
+            color: inherit;
+        }
+        span:hover {
+            padding-left: 0.5rem;
+            font-size: 1.4rem;
+        }
+    }
+    .navController:has(> span:hover) {
+        border-left: solid var(--gray-dark) 2px;
+    }
+
+    ul {
+        list-style-type: none;
+        width: 90%;
+    }
+
+    a,
+    button {
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        display: block;
+        width: 100%;
+        // color: var(--gray-dark);
+        transition: all 0.3s;
+        text-align: left;
+    }
+}
+
+nav[class] {
+    transform: translateX(-100%);
+}
+nav[class~="open"] {
+    transform: translateX(0);
+}
+nav[class] + section {
+    width: var(--action-width-c);
+}
+nav[class~="open"] + section {
+    width: var(--action-width-o);
+}
+section {
+    transition: var(--width-transition);
+    height: var(--glob-height);
+}

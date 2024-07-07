@@ -22,6 +22,4 @@ function isAxiosError(
 }
 
 
-export {isAxiosError}
-
-export default $api
+export {isAxiosError, $api}

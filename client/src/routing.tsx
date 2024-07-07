@@ -1,13 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import { providerPath as path } from "./routingPath";
 
-
-import PortfolioApp from "./components/PortfolioApp/Portfolio";
-import MainPortfolio from "./components/NavPortfolio/MainPortfolio";
-import TodoBoard from "./components/NavPortfolio/ChildPorts/TodoBoard/TodoBoard";
-import ErrorEl from "./components/ErrorElement/ErrorEl";
+import TodoBoard from "./components/Boards/TodoBoard/TodoBoard";
+import MainPortfolio from "./components/Main/Main";
 import Registration from "./components/Registration/Registration";
-import Settings from "./components/Settings/Settings";
+import ErrorEl from "./components/Error/Error";
+import Settings from "./components/Boards/SettingsBoard/Settings";
+import PortfolioApp from "./components/Intro/Intro";
 
 const routes = createBrowserRouter([
     {

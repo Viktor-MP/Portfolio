@@ -55,3 +55,15 @@
     justify-content: center;
     align-items: center;
 }
+
+
+.link_to {
+    padding: 0.5rem 0.2rem;
+    text-decoration-line: none;
+    text-underline-offset: 0.5rem;
+    color: var(--sky);
+}
+
+.link_to:hover {
+    text-decoration-line: underline;
+}

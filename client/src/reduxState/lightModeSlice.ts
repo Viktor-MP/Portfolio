@@ -13,6 +13,7 @@ const lightModeSlice = createSlice({
     initialState,
     reducers: {
         setMode: (state, action: PayloadAction<boolean>) => {
+            console.log(action.payload)
             state.lightMode = action.payload;
         },
     },

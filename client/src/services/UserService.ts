@@ -1,8 +1,7 @@
-import { formContentType } from "../types/register_Types";
-import { AuthResponse, IUsers, IUser, UserExMess } from "./AuthResponse";
+import { IUsers, IUser, UserExMess } from "./AuthResponse";
 
-import $api from "../axios/axios";
-import { AxiosResponse, isAxiosError } from "axios";
+import { $api } from "../axios";
+import { AxiosResponse } from "axios";
 
 const fetchUsers = async (): Promise<AxiosResponse<IUsers[]>> => {
     return $api.get<IUsers[]>("/users");

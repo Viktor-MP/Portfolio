@@ -8,33 +8,33 @@ import {
     useRef,
     useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "src/reduxState/store";
+
 
 import {
     formContentType,
     formContentValidate,
     registerTypes,
-} from "../../types/register_Types";
+} from "../../types";
 
 import GClass from "../Global.module.scss";
 import Styles from "../Style.module.scss";
 import classNames from "classnames";
 
-import { useSelector } from "react-redux";
-import { RootState } from "src/reduxState/store";
 
 import { initial_formContent } from "../../utils/register_utils";
 
-import SignInput from "../SignInput/SignInput";
 import { useRegisterContext } from "../../contexts/registered_context";
-import { useNavigate } from "react-router-dom";
+import { SignInput } from "../_Molecules/index";
 
-import { validate } from "../../validation/_index";
+import { validate } from "../../validation/index";
 import { fetchUser } from "src/services/UserService";
 import { checkAuth, login, registration } from "src/services/AuthService";
 
 import { providerPath as path } from "../../routingPath";
 
-import { useDispatch } from "react-redux";
 import { setMode } from "src/reduxState/lightModeSlice";
 
 const Registration: FC<registerTypes> = ({ state, comp_name }) => {

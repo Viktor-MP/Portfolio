@@ -1,0 +1,28 @@
+@import "../Global.module.scss";
+// ============== global classes ===============
+
+
+:root {
+    --glob-height: 100vh;
+    --nav-width: 15%;
+    --action-width-c: 100%;
+    --action-width-o: 85%;
+    --width-transition: transform 0.5s, width 0.5s;
+}
+
+// =============================================
+
+
+
+.action {
+    min-height: var(--glob-height);
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+
+    section {
+        position: relative;
+        overflow: hidden;
+    }
+  
+}

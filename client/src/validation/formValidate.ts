@@ -1,4 +1,4 @@
-import { formContentType, formContentValidate } from "../types/_index";
+import { formContentType, formContentValidate } from "../types";
 
 const formValidate = (form: formContentType) => {
     const newErrors: Partial<formContentValidate> = {};

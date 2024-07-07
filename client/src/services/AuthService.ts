@@ -1,9 +1,8 @@
 import { formContentType } from "../types/register_Types";
 import { AuthResponse, ErrorData } from "./AuthResponse";
 
-import $api from "../axios/axios";
-import axios from "axios";
-import { AxiosResponse } from "axios";
+import { $api } from "../axios";
+import axios, { AxiosResponse } from "axios";
 
 const login = async (
     form: formContentType
