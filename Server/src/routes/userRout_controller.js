@@ -10,15 +10,22 @@ const tokenService = require("../services/token_service");
 const ApiError = require("../exceptions/api-error");
 
 class UserRout_controller {
+    
     async checkUser(req, res, next) {
         const { key, value } = req.body;
         console.log(key, value, 1);
-        const isUserExists = await userService.findOne(key, value);
-        console.log(isUserExists, "isUserExists");
-        if (isUserExists) {
-            return res.status(200).json({ error: "User already exists" });
+        try {
+            const isUserExists = await userService.findOne(key, value);
+            console.log(isUserExists, "isUserExists");
+            if (!isUserExists) {
+                throw new Error(isUserExists)
+            }
+            return isUserExists && res.status(200).json({ error: "User already exists" });
+        } catch (error) {
+            error.data = `${key} ${value} is free`
+            return res.status(401).json(error)
         }
-        return res.status(200).json({ message: `${value} - is ready to use` });
+    
     }
 
     async registration(req, res, next) {
@@ -73,8 +80,8 @@ class UserRout_controller {
                 userData.message = "Successful login";
                 return res.status(201).json(userData);
             } else {
-                console.log(userData, 76)
-                return res.status(userData.status).json(userData)
+                console.log(userData, 76);
+                return res.status(userData.status).json(userData);
             }
         } catch (error) {
             next(error);

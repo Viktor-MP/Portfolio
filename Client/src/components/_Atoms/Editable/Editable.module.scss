@@ -1,0 +1,41 @@
+@import "../../Global.module.scss";
+
+.parentInput {
+    display: flex;
+    position: relative;
+    width: min-content;
+    max-width: 100%;
+
+    input {
+        padding: 0.3em 0.5em;
+        color: inherit;
+        background-color: inherit;
+        font-weight: 550;
+        max-width:  inherit;
+        cursor: text;
+    }
+
+    svg {
+        position: absolute;
+        right: 0.2rem;
+        top: 50%;
+
+        translate: 0 -50%;
+        font-size: 1.5rem;
+        transition: all 0.5s;
+        fill: var(--gray);
+    }
+}
+
+[class*="dark"] {
+    input:hover + svg, svg:hover {
+        fill: var(--white);
+    }
+}
+
+[class*="light"] {
+    input:hover + svg, svg:hover {
+        fill: var(--gray-dark);
+    }
+}
+

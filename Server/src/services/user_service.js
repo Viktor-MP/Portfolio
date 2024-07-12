@@ -6,26 +6,34 @@ const Tokens = db.tokens;
 const tokenService = require("./token_service");
 const UserDto = require("../dtos/user-dto");
 
-const ApiError = require("../exceptions/api-error")
+const ApiError = require("../exceptions/api-error");
+const { Sequelize } = require("sequelize");
 // const tokenModel = require("../db/Token_model");
 
 class UserService {
     async findOne(initial, state) {
         try {
             const searchingInit = await Users.findOne({
-                where: {
-                    [initial]: state,
-                },
+                where: Sequelize.where(
+                    Sequelize.literal(`BINARY ${initial}`),
+                    state
+                ),
             });
+            if (searchingInit === null) {
+                throw new Error(`${state} is not found`);
+            }
 
             return searchingInit;
         } catch (error) {
-            console.log(error, 11);
+            console.log(error, 28);
+            error = `${state} is not found`;
+            // throw new error 
         }
+    
     }
 
     async registration(userName, password) {
-         try {
+        try {
             const candidate = await this.findOne("userName", userName);
             if (candidate) {
                 throw ApiError.BadRequest(
@@ -73,16 +81,24 @@ class UserService {
             // console.log( "candidate hashed password", candidate.password,);
 
             if (!candidate) {
-               return {message: "user not found", status: 404};
+                return {
+                    message: "user not found",
+                    status: 404,
+                    name: "userName",
+                };
             }
 
             const isPassEquals = await bcrypt.compare(
                 password,
                 candidate.password
             );
-            // console.log(isPassEquals);
+
             if (!isPassEquals) {
-                return {message: "password is not correct", status: 401};
+                return {
+                    message: "password is not correct",
+                    status: 401,
+                    name: "userPass",
+                };
             }
 
             const userDto = new UserDto(candidate);
@@ -107,7 +123,7 @@ class UserService {
         return token;
     }
 
-    async  refreshToken(refreshToken) {
+    async refreshToken(refreshToken) {
         if (!refreshToken) throw ApiError.UnauthorizedError();
 
         const userData = tokenService.validateRefreshToken(refreshToken);
@@ -117,14 +133,13 @@ class UserService {
         );
 
         if (!userData || !tokenFromDB) throw ApiError.UnauthorizedError();
-        console.log(userData.id, "userDataId 121")
-        const user = await this.findOne("id", userData.id)
+        console.log(userData.id, "userDataId 121");
+        const user = await this.findOne("id", userData.id);
 
         if (!user) return ApiError.UnauthorizedError();
 
-        
-        console.log(user, "user_service 127")
-        
+        console.log(user, "user_service 127");
+
         const userDto = new UserDto(user);
         const tokens = tokenService.generateToken({ ...userDto });
         await tokenService.saveToken(
@@ -136,7 +151,6 @@ class UserService {
             ...tokens,
             user: userDto,
         };
-
     }
 
     async findAll() {
@@ -150,7 +164,6 @@ class UserService {
         const deletedUsers = await Users.destroy({ where: {} });
         console.log(deletedUsers);
     }
-
 }
 
 module.exports = new UserService();

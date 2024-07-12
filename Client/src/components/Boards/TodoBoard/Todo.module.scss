@@ -1,0 +1,71 @@
+@import "../../Global.module.scss";
+
+.workspace {
+    .board {
+        display: flex;
+        justify-content: center;
+        min-height: 100dvh;
+
+        .container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem 0 0 0;
+            gap: 1rem;
+
+            h2 {
+                margin: 1rem 0;
+                font-size: 1.5rem;
+            }
+
+            .tables {
+                display: flex;
+                flex-wrap: wrap;
+                gap: inherit;
+
+                .table {
+                    border-radius: 0.5rem;
+                    width: 30%;
+                    aspect-ratio: 1 / 0.6;
+
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    background-position: center;
+                    background-size: cover;
+                    transition: opacity 0.5s;
+                    opacity: 0.6;
+                    cursor: pointer;
+                }
+                .table:hover {
+                    opacity: 0.9;
+                }
+                .tableCreator {
+                    gap: 1rem;
+                    // position: absolute;
+                    // top: 50%;
+                    // right: 0;
+                    justify-content: flex-start;
+                    p {
+                        color: var(--light);
+                        padding: 0.3em 0.5em;
+                        font-weight: 800;
+                    }
+                    svg {
+                        fill: var(--light);
+                        width: 40%;
+                        height: 40%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.todo_light {
+    @include board_light();
+}
+
+.todo_dark {
+    @include board_dark();
+}
