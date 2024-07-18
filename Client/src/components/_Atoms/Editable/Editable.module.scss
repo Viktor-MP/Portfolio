@@ -28,13 +28,13 @@
 }
 
 [class*="dark"] {
-    input:hover + svg, svg:hover {
+    input:hover + svg, .table svg:hover {
         fill: var(--white);
     }
 }
 
 [class*="light"] {
-    input:hover + svg, svg:hover {
+    input:hover + svg, .table svg:hover {
         fill: var(--gray-dark);
     }
 }

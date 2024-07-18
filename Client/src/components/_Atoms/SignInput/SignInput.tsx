@@ -50,6 +50,7 @@ const SignInput: FC<input_Types> = ({
                 )}
             </div>
             <input
+                autoComplete="on"
                 ref={inputItem}
                 onChange={(e) => {
                     isTyping(e);

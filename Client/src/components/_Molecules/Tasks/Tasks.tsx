@@ -4,11 +4,13 @@ import { taskPropsType } from "src/types";
 
 const Tasks: FC<taskPropsType> = ({ className, change ,name, table}) => {
     console.log(name)
+    console.log(table)
     return (
         <div
             className={className}
             style={{
-                backgroundImage: `url(${table.bg_url})`,
+                backgroundImage: `url(${table.bg.url})`,
+                color: `${table.color}`
             }}
         >   
             <Editable  name={name} change={change} editablePath={table.tableName} id={table.id} />

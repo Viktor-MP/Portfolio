@@ -1,23 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-    ChangeEvent,
-    FC,
-    FormEvent,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from "react";
+import { FC, useRef, useState, FormEvent, useEffect, ChangeEvent } from "react";
 import axios from "axios";
 
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "src/reduxState/_store";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "src/reduxState/_store";
+import { useSelector, useDispatch } from "react-redux";
 
 import {
+    registerTypes,
     formContentType,
     formContentValidate,
-    registerTypes,
 } from "../../types";
 
 import GClass from "../Global.module.scss";
@@ -41,6 +33,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const dispatch = useDispatch();
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [errors, setErrors] = useState<formContentValidate>({});
     const [formContent, setFormContent] =
         useState<formContentType>(initial_formContent);
@@ -48,7 +42,7 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
     const { setRegister } = useRegisterContext();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const localModeState = localStorage.getItem("isLightMode");
         if (localModeState === "true") dispatch(setMode(true));
         else if (localModeState === "false") dispatch(setMode(false));
@@ -64,6 +58,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
                 }
             });
         }
+
+        setLoading(!loading);
     }, []);
 
     useEffect(() => {
@@ -71,6 +67,9 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
             state === "Sign Up" &&
             validate(formContent).then((user) => setErrors({ ...user }));
     }, [formContent]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
     const formContent_handler = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
@@ -162,6 +161,8 @@ const Registration: FC<registerTypes> = ({ state, comp_name }) => {
         }
     };
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
     return (
         <main
             className={` ${GClass["flex_col_cen"]} min-h-dvh gap-8 ${classNames(

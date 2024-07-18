@@ -20,42 +20,71 @@
 
             .tables {
                 display: flex;
-                flex-wrap: wrap;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
                 gap: inherit;
+                // position: relative;
+                // min-height: 100dvh;
 
-                .table {
+                .table,
+                .tableCreator {
                     border-radius: 0.5rem;
-                    width: 30%;
+                    width: 100%;
                     aspect-ratio: 1 / 0.6;
 
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+
                     background-position: center;
+                    background-repeat: no-repeat;
                     background-size: cover;
                     transition: opacity 0.5s;
                     opacity: 0.6;
                     cursor: pointer;
                 }
-                .table:hover {
-                    opacity: 0.9;
+
+                .table:hover,
+                .tableCreator:hover {
+                    opacity: 1;
                 }
+
                 .tableCreator {
                     gap: 1rem;
-                    // position: absolute;
-                    // top: 50%;
-                    // right: 0;
-                    justify-content: flex-start;
-                    p {
-                        color: var(--light);
-                        padding: 0.3em 0.5em;
-                        font-weight: 800;
+                    justify-content: center;
+                    transition: all 5s;
+                    position: relative;
+                    left: 0;
+
+                    div {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: inherit;
+                        position: relative;
+
+                        p {
+                            padding: 0.3em 0.5em;
+                            font-weight: 800;
+                            text-align: center;
+                        }
+                        svg {
+                            fill: calc(color);
+                            width: 40%;
+                            height: 40%;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            translate: -50% -50%;
+                        }
                     }
-                    svg {
-                        fill: var(--light);
-                        width: 40%;
-                        height: 40%;
-                    }
+                }
+                .tableCreatorCenter {
+                    position: absolute;
+                    width: 50%;
+                    left: 50%;
+                    top: 50%;
+                    opacity: 1;
+                    translate: -50% -50%;
                 }
             }
         }

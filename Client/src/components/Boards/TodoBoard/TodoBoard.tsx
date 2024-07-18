@@ -1,9 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 
 import GClass from "../../Global.module.scss";
 import Classes from "./Todo.module.scss";
-import { bgCImages } from "src/utils/todo_utils";
+import { bgImages, colors } from "src/utils/todo_utils";
 
 import { useRegisterContext } from "src/contexts/registered_context";
 import { RootState } from "src/reduxState/_store";
@@ -18,7 +18,7 @@ import { Heading, Tasks } from "src/components/_Molecules";
 import { todoWorkspaceType } from "src/types/todo_Types";
 
 import { BsPlusSquare } from "react-icons/bs";
-import { Input } from "postcss";
+import BoardCreator from "src/components/_Molecules/BoardCreator/BoardCreator";
 
 const TodoBoard: FC<todo_types> = ({ className }) => {
     const { register } = useRegisterContext();
@@ -35,9 +35,10 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
         useState<todoWorkspaceType>(localTodoBoard);
 
     const randomBgImage = {
-        backgroundImage: `url(${
-            bgCImages[Math.floor(Math.random() * (bgCImages.length - 1))]
-        })`,
+        background: `url(${
+            bgImages[Math.floor(Math.random() * (bgImages.length - 1))].url
+        })  no-repeat center center / cover`,
+        color: colors[Math.floor(Math.random() * (colors.length - 1))].value,
     };
 
     useEffect(() => {
@@ -65,10 +66,6 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
         }, 500);
     };
 
-    console.log(
-        Math.floor(Math.random() * (bgCImages.length - 1)),
-        bgCImages.length
-    );
     return (
         <section
             className={`${classNames({
@@ -92,6 +89,7 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
                     <h3>Boards</h3>
                     <div className={`${Classes["tables"]}`}>
                         {workspace.tables.map((table) => {
+                            console.log(table);
                             return (
                                 <Tasks
                                     table={table}
@@ -102,16 +100,32 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
                                 />
                             );
                         })}
-                    <div
-                        className={`${Classes["table"]} ${Classes["tableCreator"]} ${GClass["flex_cen"]}`}
-                        style={randomBgImage}
-                    >
-                        {isNewTable ? <>
-                        <p>Create new table</p>
-                        <BsPlusSquare />
-                        
-                        </>: <div></div>}
-                    </div>
+                        <div
+                            className={`${Classes["tableCreator"]} ${
+                                GClass["flex_cen"]
+                            }
+                                ${classNames({
+                                    [Classes["inOrder"]]: !isNewTable,
+                                    [Classes["tableCreatorCenter"]]: isNewTable,
+                                })}
+                                    `}
+                            style={randomBgImage}
+                        >
+                            {!isNewTable ? (
+                                <div
+                                    role="button"
+                                    aria-hidden="true"
+                                    onClick={() => setIsNewTable(!isNewTable)}
+                                >
+                                    <p>Create new board</p>
+
+                                    <BsPlusSquare />
+                                </div>
+                            ) : (
+                                <BoardCreator />
+                            )}
+                        </div>{" "}
+                      
                     </div>
                 </div>
             </div>

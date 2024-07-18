@@ -1,17 +1,17 @@
-import sky from "./backgroundImages/sky.jpg";
-import web from "./backgroundImages/web.jpg";
-import kirpich from "./backgroundImages/kirpich.jpg";
-import blackLives from "./backgroundImages/blackLives.jpg";
-import Ocean_Waves from "./backgroundImages/Ocean_Waves.jpg";
-import paintedWaves from "./backgroundImages/paintedWaves.jpg";
-import Colorful_polygon from "./backgroundImages/Colorful_polygon.jpg";
+import ChromaClouds from "./backgroundImages/ChromaClouds.jpg";
+import LuminaLines from "./backgroundImages/LuminaLines.jpg";
+import DarkLine from "./backgroundImages/DarkLine.jpg";
+import MidnightPlumage from "./backgroundImages/MidnightPlumage.jpg";
+import WaveWhisper from "./backgroundImages/WaveWhisper.jpg";
+import MidnightTide from "./backgroundImages/MidnightTide.jpg";
+import Spectrum from "./backgroundImages/Spectrum.jpg";
 
 export {
-    sky,
-    web,
-    kirpich,
-    blackLives,
-    Ocean_Waves,
-    paintedWaves,
-    Colorful_polygon,
+    ChromaClouds,
+    LuminaLines,
+    DarkLine,
+    MidnightPlumage,
+    WaveWhisper,
+    MidnightTide,
+    Spectrum,
 };

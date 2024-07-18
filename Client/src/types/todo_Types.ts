@@ -1,7 +1,14 @@
+
+export type bgImages = {
+    id: number;
+    name: string;
+    url: string
+}
+
 export type tablesTypes = {
     tableName: string;
     id: number;
-    bg_url: string;
+    bg: bgImages;
     color?: string
 };
 

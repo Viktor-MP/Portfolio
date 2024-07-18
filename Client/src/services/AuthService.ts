@@ -30,6 +30,8 @@ const logout = async (): Promise<void> => {
 
 const checkAuth = async () => {
     try {
+        console.log("try");
+
         const response = await axios.get(
             process.env.REACT_APP_URL + "/refresh",
             { withCredentials: true }
@@ -37,6 +39,7 @@ const checkAuth = async () => {
         localStorage.setItem("token", response.data.accessToken);
         return response;
     } catch (error) {
+        console.log("catch")
         throw error;
     }
 };

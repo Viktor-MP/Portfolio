@@ -1,21 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link, useNavigate } from "react-router-dom";
+
+import { startTransition, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 // styles
 import GClass from "../Global.module.scss";
 import Styles from "../Style.module.scss";
 import classNames from "classnames";
 
-import { useLayoutEffect } from "react";
 import { useRegisterContext } from "src/contexts/registered_context";
-import { checkAuth, logout } from "src/services/AuthService";
+import { checkAuth } from "src/services/AuthService";
 
 // redux
+import { providerPath as path } from "../../routingPath";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../reduxState/_store";
-import { providerPath as path } from "../../routingPath";
 
-import { setMode } from "src/reduxState/lightModeSlice";
+import { setMode } from "src/reduxState/lightModeSlice";      
 
 const Intro = () => {
     const { setRegister } = useRegisterContext();
@@ -24,45 +26,61 @@ const Intro = () => {
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
     const dispatch = useDispatch();
 
-    const modeChanger = () => {
-        console.log(!mode);
-        dispatch(setMode(!mode));
-        localStorage.setItem("isLightMode", (!mode).toString());
-    };
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    useLayoutEffect(() => {
+    // const modeChanger = () => {
+    //     console.log(!mode);
+    //     dispatch(setMode(!mode));
+    //     localStorage.setItem("isLightMode", (!mode).toString());
+    // };
+
+    useEffect(() => {
         const localModeState = localStorage.getItem("isLightMode");
         if (localModeState === "true") dispatch(setMode(true));
         else if (localModeState === "false") dispatch(setMode(false));
 
-        if (localStorage.getItem("token")) {
-            checkAuth().then((res) => {
-                if (res?.status === 200) {
-                    setRegister({
-                        userName: res.data.user.userName,
-                        isAuth: res.data.user.isActivated,
+        const fetchData = async () => {
+            try {
+                if (localStorage.getItem("token")) {
+                    await checkAuth().then((res) => {
+                        if (res?.status === 200) {
+                            setRegister({
+                                userName: res.data.user.userName,
+                                isAuth: res.data.user.isActivated,
+                            });
+                        }
                     });
-                    navigate(path.todoBoard(), { replace: true });
                 }
-            });
-        }
+            } catch (error) {
+                if (axios.isAxiosError(error) && !error.response) {
+                    setError(
+                        "Network error, please check your internet connection or try again later."
+                    );
+                } else {
+                    setError("An unexpected error occurred.");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
     }, []);
 
-    const logoutHandler = async () => {
-        try {
-            const userLogout = await logout();
-            localStorage.removeItem("token");
-            setRegister({
-                userName: "guest",
-                isAuth: false,
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    console.log(mode);
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>{error}</div>;
 
-    console.log(Styles["signRef"]);
+    const changePage = (
+        event: { preventDefault: () => void },
+        path: string
+    ) => {
+        event.preventDefault();
+
+        startTransition(() => {
+            navigate(path);
+        });
+    };
 
     return (
         <main
@@ -81,27 +99,43 @@ const Intro = () => {
                 <p>I proudly present you my portfolio</p>
                 <p>
                     You can{" "}
-                    <Link className={`${GClass["link_to"]}`} to={path.signUp()}>
-                        sign up
-                    </Link>{" "}
+                    <span
+                        aria-hidden="true"
+                        onClick={(e) => changePage(e, path.signUp())}
+                        className={`${GClass["link_to"]}`}
+                    >
+                        Sign up
+                    </span>{" "}
                     in that case you&apos;ll have more options to use
                 </p>
 
                 <p>
                     If not continue as a{" "}
-                    <Link className={`${GClass["link_to"]}`} to={path.guest()}>
+                    <span
+                        aria-hidden="true"
+                        onClick={(e) => changePage(e, path.guest())}
+                        className={`${GClass["link_to"]}`}
+                    >
                         Guest
-                    </Link>
+                    </span>{" "}
                 </p>
                 <div className="flex justify-evenly w-full ">
-                    <Link className={Styles["signRef"]} to={path.signIn()}>
+                    <span
+                        aria-hidden="true"
+                        onClick={(e) => changePage(e, path.signIn())}
+                        className={`${Styles["signRef"]}`}
+                    >
                         Sign in
-                    </Link>
-                    <Link className={Styles["signRef"]} to={path.signUp()}>
+                    </span>{" "}
+                    <span
+                        aria-hidden="true"
+                        onClick={(e) => changePage(e, path.signUp())}
+                        className={`${Styles["signRef"]}`}
+                    >
                         Sign up
-                    </Link>
+                    </span>
                 </div>
-                <button onClick={modeChanger}>change mode</button>
+                {/* <button onClick={modeChanger}>change mode</button> */}
             </div>
         </main>
     );

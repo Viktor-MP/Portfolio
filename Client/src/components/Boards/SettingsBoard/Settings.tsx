@@ -4,6 +4,7 @@ import { setMode } from "src/reduxState/lightModeSlice";
 import { RootState } from "src/reduxState/_store";
 
 const Settings = () => {
+
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
     const dispatch = useDispatch();
 

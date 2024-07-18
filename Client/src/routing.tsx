@@ -1,17 +1,32 @@
+import React, { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { providerPath as path } from "./routingPath";
 
-import TodoBoard from "./components/Boards/TodoBoard/TodoBoard";
-import MainPortfolio from "./components/Main/Main";
-import Registration from "./components/Registration/Registration";
-import ErrorEl from "./components/Error/Error";
-import Settings from "./components/Boards/SettingsBoard/Settings";
-import PortfolioApp from "./components/Intro/Intro";
+const Main = lazy(() => import("./components/Main/Main"));
+const ErrorEl = lazy(() => import("./components/Error/Error"));
+const Intro = lazy(() => import("./components/Intro/Intro"));
+// import ErrorEl from "./components/Error/Error";
+// import Intro from "./components/Intro/Intro";
+
+const TodoBoard = lazy(() =>
+    import("./components/Boards/TodoBoard/TodoBoard").then((module) => {
+        return { default: module.default };
+    })
+);
+
+const Settings = lazy(() =>
+    import("./components/Boards/SettingsBoard/Settings").then((module) => {
+        return { default: module.default };
+    })
+);
+const Registration = lazy(
+    () => import("./components/Registration/Registration")
+);
 
 const routes = createBrowserRouter([
     {
         path: path.base,
-        element: <PortfolioApp />,
+        element: <Intro />,
         errorElement: <ErrorEl />,
     },
     {
@@ -24,11 +39,15 @@ const routes = createBrowserRouter([
     },
     {
         path: path.port,
-        element: <MainPortfolio />,
+        element: <Main />,
         children: [
             {
                 path: path.todoBoard(),
                 element: <TodoBoard />,
+            },
+            {
+                path: path.todoBoard() + "/board/:id",
+                element: <Settings />,
             },
             {
                 path: path.myChat(),
