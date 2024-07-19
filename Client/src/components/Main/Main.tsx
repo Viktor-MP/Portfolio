@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { FC, Suspense, startTransition, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { Nav } from "../_Molecules/index";
+import { Nav } from "../_Molecules";
 
 import Classes from "./Main.module.scss";
 import classNames from "classnames";
@@ -19,14 +19,15 @@ const MainPortfolio: FC<mainPropsType> = ({ className = "" }) => {
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
     const dispatch = useDispatch();
 
-   
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
 
     useEffect(() => {
         const localModeState = localStorage.getItem("isLightMode");
         if (localModeState === "true") dispatch(setMode(true));
         else if (localModeState === "false") dispatch(setMode(false));
+
 
         const fetchData = async () => {
             try {

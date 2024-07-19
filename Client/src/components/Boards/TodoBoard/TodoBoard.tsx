@@ -125,7 +125,6 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
                                 <BoardCreator />
                             )}
                         </div>{" "}
-                      
                     </div>
                 </div>
             </div>

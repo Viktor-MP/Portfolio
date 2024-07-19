@@ -1,33 +1,41 @@
-import React, { lazy } from "react";
+import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import { providerPath as path } from "./routingPath";
 
-const Main = lazy(() => import("./components/Main/Main"));
-const ErrorEl = lazy(() => import("./components/Error/Error"));
-const Intro = lazy(() => import("./components/Intro/Intro"));
-// import ErrorEl from "./components/Error/Error";
-// import Intro from "./components/Intro/Intro";
+const Main = lazy(() =>
+    import("./components/Main/Main")
+);
+const ErrorEl = lazy(() =>
+    import("./components/Error/Error")
+);
+const Intro = lazy(() =>
+    import("./components/Intro/Intro")
+);
+const Registration = lazy(() =>
+    import("./components/Registration/Registration")
+);
 
 const TodoBoard = lazy(() =>
-    import("./components/Boards/TodoBoard/TodoBoard").then((module) => {
-        return { default: module.default };
-    })
+    import("./components/Boards/TodoBoard/TodoBoard")
 );
 
 const Settings = lazy(() =>
-    import("./components/Boards/SettingsBoard/Settings").then((module) => {
-        return { default: module.default };
-    })
-);
-const Registration = lazy(
-    () => import("./components/Registration/Registration")
+    import("./components/Boards/SettingsBoard/Settings")
 );
 
 const routes = createBrowserRouter([
     {
         path: path.base,
-        element: <Intro />,
-        errorElement: <ErrorEl />,
+        element: (
+            <Suspense fallback={<p>Loading...</p>}>
+                <Intro />
+            </Suspense>
+        ),
+        errorElement: (
+            <Suspense fallback={<p>Loading...</p>}>
+                <ErrorEl />
+            </Suspense>
+        ),
     },
     {
         path: path.signUp(),
