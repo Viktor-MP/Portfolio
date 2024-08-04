@@ -1,15 +1,85 @@
-import React from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
+import { BsPlusSquare } from "react-icons/bs";
+import { bgImages, colors } from "src/utils/todo_utils";
 
-const BoardCreator = () => {
-    return <>
-        <form action="">
-            <input type="text" name="TableName" placeholder="Table name" />
-            <div>
-                creating form
-            </div>
+import GClass from "../../Global.module.scss";
+import Classes from "../../Boards/TodoBoard/Todo.module.scss";
+import classNames from "classnames";
 
-        </form>
-    </>;
+const BoardCreator: FC = () => {
+    const [isNewTable, setIsNewTable] = useState<boolean>(false);
+
+    const creatorRef = useRef<HTMLDivElement | null>(null);
+    const [style, setStyle] = useState({ left: "0px", top: "0px" });
+
+    const randomBgImage = {
+        background: `url(${
+            bgImages[Math.floor(Math.random() * (bgImages.length - 1))].url
+        })  no-repeat center center / cover`,
+        color: colors[Math.floor(Math.random() * (colors.length - 1))].value,
+    };
+
+    useEffect(() => {
+
+        setStyle({
+            left: creatorRef.current?.offsetLeft + "px" || "0px",
+            top: creatorRef.current?.offsetTop + "px" || "0px",
+        });
+    }, []);
+
+    const changeCreatorPosition = () => {
+        setTimeout(() => {
+            setStyle({
+                left: "50%",
+                top: "50%",
+            });
+        }, 0);
+        creatorRef.current?.parentElement?.scrollTo({
+            top: 0,
+            behavior: "smooth",
+        });
+
+        setIsNewTable(!isNewTable);
+    };
+
+    return (
+        <div
+            ref={creatorRef}
+            style={style}
+            className={`${Classes["tableCreator"]} ${GClass["flex_cen"]}
+                ${classNames({
+                    [Classes["tableCreatorCenter"]]: isNewTable,
+                })}
+           `}
+        >
+            {!isNewTable ? (
+                <div
+                    role="button"
+                    aria-hidden="true"
+                    onClick={changeCreatorPosition}
+                    style={randomBgImage}
+                >
+                    <p>Create new board</p>
+
+                    <BsPlusSquare />
+                </div>
+            ) : (
+                <form action="">
+                    <input
+                        type="text"
+                        name="BoardName"
+                        placeholder="Board name"
+                    />
+                    <input
+                        type="text"
+                        name="BoardName"
+                        placeholder="Board name"
+                    />
+                    <div></div>
+                </form>
+            )}
+        </div>
+    );
 };
 
 export default BoardCreator;

@@ -1,9 +1,7 @@
 import { useSelector } from "react-redux";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 
-import GClass from "../../Global.module.scss";
 import Classes from "./Todo.module.scss";
-import { bgImages, colors } from "src/utils/todo_utils";
 
 import { useRegisterContext } from "src/contexts/registered_context";
 import { RootState } from "src/reduxState/_store";
@@ -17,15 +15,12 @@ import classNames from "classnames";
 import { Heading, Tasks } from "src/components/_Molecules";
 import { todoWorkspaceType } from "src/types/todo_Types";
 
-import { BsPlusSquare } from "react-icons/bs";
 import BoardCreator from "src/components/_Molecules/BoardCreator/BoardCreator";
 
 const TodoBoard: FC<todo_types> = ({ className }) => {
     const { register } = useRegisterContext();
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const mode = useSelector((state: RootState) => state.lightMode.lightMode);
-
-    const [isNewTable, setIsNewTable] = useState<boolean>(false);
 
     const localTodoBoard = JSON.parse(
         localStorage.getItem("todoBoard") || JSON.stringify(todoWorkspace)
@@ -34,32 +29,25 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
     const [workspace, setWorkspace] =
         useState<todoWorkspaceType>(localTodoBoard);
 
-    const randomBgImage = {
-        background: `url(${
-            bgImages[Math.floor(Math.random() * (bgImages.length - 1))].url
-        })  no-repeat center center / cover`,
-        color: colors[Math.floor(Math.random() * (colors.length - 1))].value,
-    };
-
     useEffect(() => {
-        console.log(workspace);
+        // console.log(workspace);
         const todoBoard = JSON.stringify(workspace);
         localStorage.setItem("todoBoard", todoBoard);
     }, [workspace]);
 
     const boardContent_handler = (e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
+        const tar = e.target;
+        const newValue = tar.value;
 
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
 
         timeoutRef.current = setTimeout(() => {
-            if (e.target.name !== "todoName") {
-                localTodoBoard[`${e.target.name}`][+e.target.id].tableName =
-                    newValue;
+            if (tar.name !== "todoName") {
+                localTodoBoard[`${tar.name}`][+tar.id - 1].tableName = newValue;
             } else {
-                localTodoBoard[`${e.target.name}`] = newValue;
+                localTodoBoard[`${tar.name}`] = newValue;
             }
 
             setWorkspace({ ...localTodoBoard });
@@ -89,7 +77,7 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
                     <h3>Boards</h3>
                     <div className={`${Classes["tables"]}`}>
                         {workspace.tables.map((table) => {
-                            console.log(table);
+                            // console.log(table);
                             return (
                                 <Tasks
                                     table={table}
@@ -100,31 +88,8 @@ const TodoBoard: FC<todo_types> = ({ className }) => {
                                 />
                             );
                         })}
-                        <div
-                            className={`${Classes["tableCreator"]} ${
-                                GClass["flex_cen"]
-                            }
-                                ${classNames({
-                                    [Classes["inOrder"]]: !isNewTable,
-                                    [Classes["tableCreatorCenter"]]: isNewTable,
-                                })}
-                                    `}
-                            style={randomBgImage}
-                        >
-                            {!isNewTable ? (
-                                <div
-                                    role="button"
-                                    aria-hidden="true"
-                                    onClick={() => setIsNewTable(!isNewTable)}
-                                >
-                                    <p>Create new board</p>
 
-                                    <BsPlusSquare />
-                                </div>
-                            ) : (
-                                <BoardCreator />
-                            )}
-                        </div>{" "}
+                        <BoardCreator />
                     </div>
                 </div>
             </div>

@@ -3,8 +3,8 @@ import { Editable } from "src/components/_Atoms";
 import { taskPropsType } from "src/types";
 
 const Tasks: FC<taskPropsType> = ({ className, change ,name, table}) => {
-    console.log(name)
-    console.log(table)
+    // console.log(name)
+    // console.log(table)
     return (
         <div
             className={className}

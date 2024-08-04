@@ -17,6 +17,7 @@ const Editable: FC<editablePropsType> = ({ editablePath, change, name, id }) => 
 
     return (
         <div className={`${Classes["parentInput"]} `}>
+            
             <input onChange={(e) => {
                 isTyping(e)
                 console.log(e.target.name)

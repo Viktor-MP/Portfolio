@@ -1,12 +1,14 @@
 @import "../Global.module.scss";
+
+@import "../../App.scss";
 // ============== global classes ===============
 
 
 :root {
-    --glob-height: 100vh;
     --nav-width: 15%;
-    --action-width-c: 100%;
+    --glob-height: 100vh;
     --action-width-o: 85%;
+    --action-width-c: 100%;
     --width-transition: transform 0.5s, width 0.5s;
 }
 
@@ -16,13 +18,28 @@
 
 .action {
     min-height: var(--glob-height);
-    position: relative;
     display: flex;
     justify-content: flex-end;
 
     section {
-        position: relative;
         overflow: hidden;
     }
   
+}
+
+
+@media screen and (max-width: $breakpoint-xl) {
+    :root {
+        --nav-width: 30%;
+        --action-width-o: 70%;
+    }
+}
+
+
+
+@media screen and (max-width: $breakpoint-md) {
+    :root {
+        --nav-width: 90%;
+        --action-width-o: 100%;
+    }
 }

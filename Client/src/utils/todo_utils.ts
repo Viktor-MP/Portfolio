@@ -64,21 +64,64 @@ const bgImages = [
 
 const todoWorkspace = {
     todoName: "Workspace",
+
     tables: [
         {
-            id: 0,
+            id: 1,
             tableName: "Task manager",
             bg: bgImages[4],
             color: colors[10].value,
         },
         {
-            id: 1,
+            id: 2,
             tableName: "My project",
             bg: bgImages[6],
             color: colors[10].value,
         },
         {
-            id: 2,
+            id: 3,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 4,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 5,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 6,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 7,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 8,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 9,
+            tableName: "My project",
+            bg: bgImages[3],
+            color: colors[10].value,
+        },
+        {
+            id: 10,
             tableName: "My project",
             bg: bgImages[3],
             color: colors[10].value,
