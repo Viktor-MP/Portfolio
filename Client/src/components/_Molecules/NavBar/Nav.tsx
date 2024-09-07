@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { IoIosArrowDroprightCircle } from "react-icons/io";
+
 import { Link, useNavigate } from "react-router-dom";
-import { FC } from "react";
+import { FC, startTransition } from "react";
 
 import Classes from "./Nav.module.scss";
 import classNames from "classnames";
@@ -23,6 +24,7 @@ const Nav: FC<NavCompTypes> = ({ className, mode }) => {
     const navigate = useNavigate();
 
     const { navOpen, setNavOpen } = useOpenContext();
+    
 
     const logoutHandler = async () => {
         try {
@@ -39,6 +41,17 @@ const Nav: FC<NavCompTypes> = ({ className, mode }) => {
         }
     };
 
+
+        const changePage = (
+            event: { preventDefault: () => void },
+            path: string
+        ) => {
+            event.preventDefault();
+
+            startTransition(() => {
+                navigate(path);
+            });
+        };
     const navBarHandler = () => setNavOpen({ state: !navOpen.state });
 
     return (
@@ -77,7 +90,10 @@ const Nav: FC<NavCompTypes> = ({ className, mode }) => {
                     </li>
                     <li>
                         {!register.isAuth ? (
-                            <Link to={path.signIn()}> Log in </Link>
+                            <button onClick={(e) => changePage(e, path.signIn())}>
+                                {" "}
+                                Log in{" "}
+                            </button>
                         ) : (
                             <button onClick={logoutHandler}>Log out</button>
                         )}

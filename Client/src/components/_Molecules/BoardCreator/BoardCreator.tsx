@@ -10,7 +10,10 @@ const BoardCreator: FC = () => {
     const [isNewTable, setIsNewTable] = useState<boolean>(false);
 
     const creatorRef = useRef<HTMLDivElement | null>(null);
-    const [style, setStyle] = useState({ left: "0px", top: "0px" });
+    const [style, setStyle] = useState({
+        left: "0px",
+        top: "0px",
+    });
 
     const randomBgImage = {
         background: `url(${
@@ -20,12 +23,18 @@ const BoardCreator: FC = () => {
     };
 
     useEffect(() => {
-
-        setStyle({
-            left: creatorRef.current?.offsetLeft + "px" || "0px",
-            top: creatorRef.current?.offsetTop + "px" || "0px",
-        });
-    }, []);
+        if (!isNewTable) {
+            setStyle({
+                left: creatorRef.current?.offsetLeft + "px" || "0px",
+                top: creatorRef.current?.offsetTop + "px" || "0px",
+            });
+        } else {
+            setStyle({
+                left: "0px",
+                top: "0px",
+            });
+        }
+    }, [isNewTable]);
 
     const changeCreatorPosition = () => {
         setTimeout(() => {
@@ -34,10 +43,10 @@ const BoardCreator: FC = () => {
                 top: "50%",
             });
         }, 0);
-        creatorRef.current?.parentElement?.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
+        // creatorRef.current?.parentElement?.scrollTo({
+        //     top: 0,
+        //     behavior: "smooth",
+        // });
 
         setIsNewTable(!isNewTable);
     };
@@ -64,7 +73,7 @@ const BoardCreator: FC = () => {
                     <BsPlusSquare />
                 </div>
             ) : (
-                <form action="">
+                <form>
                     <input
                         type="text"
                         name="BoardName"
@@ -75,7 +84,16 @@ const BoardCreator: FC = () => {
                         name="BoardName"
                         placeholder="Board name"
                     />
-                    <div></div>
+                    <div>
+                        <button
+                            onClick={() => {
+                                setIsNewTable(!isNewTable);
+                            }}
+                        >
+                            cancel
+                        </button>
+                        <button>create</button>
+                    </div>
                 </form>
             )}
         </div>

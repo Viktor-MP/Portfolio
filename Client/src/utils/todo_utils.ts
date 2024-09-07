@@ -84,48 +84,7 @@ const todoWorkspace = {
             bg: bgImages[3],
             color: colors[10].value,
         },
-        {
-            id: 4,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 5,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 6,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 7,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 8,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 9,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
-        {
-            id: 10,
-            tableName: "My project",
-            bg: bgImages[3],
-            color: colors[10].value,
-        },
+     
     ],
 };
 

@@ -43,10 +43,5 @@ function isAxiosError(error: any): error is AxiosError<{ error: string }> {
     );
 }
 
-// function isAxiosError(
-//     error: any
-// ): error is { response: { data: { error: string } } } {
-//     return typeof error.response.data.error === "string";
-// }
 
 export { isAxiosError, $api };
